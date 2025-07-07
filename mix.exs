@@ -1,8 +1,8 @@
 defmodule NervesSystemMangopiMQPro.MixProject do
   use Mix.Project
 
-  @github_organization "nerves-project"
-  @app :nerves_system_mangopi_mq_pro
+  @github_organization "fermuch"
+  @app :nerves_system_sg2002
   @source_url "https://github.com/#{@github_organization}/#{@app}"
   @version Path.join(__DIR__, "VERSION")
            |> File.read!()
