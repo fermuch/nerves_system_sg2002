@@ -1,9 +1,16 @@
 # Add project-specific packages for Buildroot here
 
+source "$NERVES_DEFCONFIG_DIR/package/cvitekconfig/Config.in"
+
 menu "Custom Packages"
-
-source "$NERVES_DEFCONFIG_DIR/packages/cvitekconfig/Config.in"
-source "$NERVES_DEFCONFIG_DIR/packages/cvitekfsbl/Config.in"
-
+source "$NERVES_DEFCONFIG_DIR/package/Config.in"
 endmenu
+
+menu "BootLoaders"
+source "$NERVES_DEFCONFIG_DIR/boot/Config.in"
+endmenu
+
+#menu "Host Packages"
+#source "$NERVES_DEFCONFIG_DIR/package/Config.in.host"
+#endmenu
 

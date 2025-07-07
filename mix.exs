@@ -121,7 +121,9 @@ defmodule NervesSystemMangopiMQPro.MixProject do
 
   defp build_runner_opts() do
     # Download source files first to get download errors right away.
-    [make_args: primary_site() ++ ["source", "cvitekconfig", "uboot", "all", "legal-info"]]
+    [
+      make_args: primary_site() ++ ["source", "cvitekconfig", "uboot", "all", "legal-info"]
+    ]
   end
 
   defp primary_site() do

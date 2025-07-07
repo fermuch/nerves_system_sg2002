@@ -1,0 +1,8 @@
+source "$NERVES_DEFCONFIG_DIR/package/aic-firmware/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cloudutils/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cvitek-modules/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cvitek-middleware/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/miniz/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cvitek-oss/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cvitek-fbtools/Config.in"
+source "$NERVES_DEFCONFIG_DIR/package/cvitek-pinmux/Config.in"

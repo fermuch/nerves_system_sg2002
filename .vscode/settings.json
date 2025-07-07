@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "compiler.h": "c",
+    "version.h": "c"
+  }
+}
