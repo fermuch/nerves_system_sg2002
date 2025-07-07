@@ -73,7 +73,7 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   end
 
   defp description do
-    "Nerves System - MangoPi MQ-Pro"
+    "Nerves System - SG2002"
   end
 
   defp docs do

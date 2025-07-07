@@ -1,0 +1,9 @@
+config BR2_PACKAGE_CVITEKFSBL
+	bool "cvitek-fsbl"
+	depends on BR2_riscv
+	depends on BR2_PACKAGE_UBOOT
+	depends on BR2_PACKAGE_OPENSBI
+	help
+	  CVITEK First Stage Boot Loader for SG2002 SoC
+
+	  https://github.com/sophgo/fsbl 
