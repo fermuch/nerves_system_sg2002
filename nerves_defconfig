@@ -58,6 +58,9 @@ BR2_PACKAGE_WPA_SUPPLICANT_WPA3=y
 BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=y
 # BR2_TARGET_ROOTFS_TAR is not set
 
+# the default mirror is broken, so we use UFPR
+BR2_GNU_MIRROR="https://gnu.c3sl.ufpr.br/ftp/"
+
 # Custom for SG2002 - must be declared before target packages
 BR2_PACKAGE_CVITEKCONFIG=y
 BR2_PACKAGE_CVITEKFSBL=y
