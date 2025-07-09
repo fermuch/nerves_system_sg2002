@@ -88,6 +88,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get Buildroot Dependencies
         run: |
+          source /root/.asdf/asdf.sh
+          asdf reshim
           mix deps.get
           ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
           cd ~/temp_nerves_system
