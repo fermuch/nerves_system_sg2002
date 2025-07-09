@@ -5,6 +5,7 @@ ARG ELIXIR_VERSION=1.18.4-otp-28
 ARG NERVES_BOOTSTRAP_VERSION=1.13.0
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV USER=root
 
 # We run as root to avoid permissions issues with the GitHub Actions runner.
 
