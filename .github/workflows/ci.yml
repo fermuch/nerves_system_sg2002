@@ -101,30 +101,6 @@ jobs:
         run: |
           mix archive.install hex nerves_bootstrap --force
           mix deps.get
-      
-      - name: Get toolchains for ccache key
-        run: |
-          mkdir .toolchains
-          for toolchain in ~/.nerves/dl/nerves_toolchain_*; do
-            if [ -e "${toolchain}" ]; then
-              ln -s ${toolchain} .toolchains/
-            fi
-          done
-          ls -l .toolchains/ || echo "No toolchains found yet"
-      
-      - name: Restore buildroot ccache
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.buildroot-ccache
-          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/*') || 'no-toolchains' }}
-          restore-keys: |
-            buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-
-      
-      - name: Build firmware with ccache
-        run: |
-          export BR2_CCACHE=y
-          export BR2_CCACHE_DIR=~/.buildroot-ccache
-          export BR2_CCACHE_INITIAL_SETUP="--max-size=1G"
           mix firmware
       
       - name: Save nerves downloads cache
@@ -132,16 +108,6 @@ jobs:
         with:
           path: ~/.nerves/dl
           key: nerves-dl-${{ github.ref_name }}-${{ github.sha }}
-      
-      - name: Save buildroot ccache
-        uses: actions/cache/save@v4
-        with:
-          path: ~/.buildroot-ccache
-          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/*') || 'no-toolchains' }}
-      
-      - name: Cleanup toolchains
-        run: |
-          rm -rf .toolchains
 
   deploy-system:
     needs: [build-system, build-docker]
