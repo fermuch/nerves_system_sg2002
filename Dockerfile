@@ -35,25 +35,25 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.16.5/cmake-3.16.5
 # Make python3 available as python
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Install asdf for the root user
-ENV ASDF_DIR="/root/.asdf"
-ENV PATH="/root/.asdf/bin:/root/.asdf/shims:${PATH}"
-SHELL ["/bin/bash", "-c"]
+# Install Erlang/OTP directly
+RUN wget https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_src_${OTP_VERSION}.tar.gz && \
+    tar -xzf otp_src_${OTP_VERSION}.tar.gz && \
+    cd otp_src_${OTP_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf otp_src_${OTP_VERSION} otp_src_${OTP_VERSION}.tar.gz
 
-RUN git clone https://github.com/asdf-vm/asdf.git /root/.asdf --branch v0.14.0 && \
-    echo -e '\n. /root/.asdf/asdf.sh' >> /root/.bashrc && \
-    echo -e '\n. /root/.asdf/completions/asdf.bash' >> /root/.bashrc && \
-    echo -e '\n. /root/.asdf/asdf.sh' >> /root/.profile
+# Install Elixir directly
+RUN wget https://github.com/elixir-lang/elixir/releases/download/v${ELIXIR_VERSION}/elixir-otp-26.zip && \
+    unzip elixir-otp-26.zip -d /usr/local && \
+    rm elixir-otp-26.zip
 
-# Install all asdf plugins and tools in a single RUN command to ensure persistence
-RUN source /root/.asdf/asdf.sh && \
-    asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git && \
-    asdf plugin add elixir https://github.com/asdf-vm/asdf-elixir.git && \
-    asdf plugin add fwup https://github.com/fwup-home/asdf-fwup.git && \
-    asdf install erlang ${OTP_VERSION} && \
-    asdf install elixir ${ELIXIR_VERSION} && \
-    asdf install fwup ${NERVES_BOOTSTRAP_VERSION} && \
-    asdf global erlang ${OTP_VERSION} && \
-    asdf global elixir ${ELIXIR_VERSION} && \
-    asdf global fwup ${NERVES_BOOTSTRAP_VERSION} && \
-    asdf reshim
+# Install fwup directly
+RUN wget https://github.com/fwup-home/fwup/releases/download/v${NERVES_BOOTSTRAP_VERSION}/fwup_${NERVES_BOOTSTRAP_VERSION}_amd64.deb && \
+    dpkg -i fwup_${NERVES_BOOTSTRAP_VERSION}_amd64.deb && \
+    rm fwup_${NERVES_BOOTSTRAP_VERSION}_amd64.deb
+
+# Update PATH to include Elixir binaries
+ENV PATH="/usr/local/bin:${PATH}"
