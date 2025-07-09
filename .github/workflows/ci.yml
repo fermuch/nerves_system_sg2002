@@ -116,7 +116,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.buildroot-ccache
-          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/') }}
+          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/*') || 'no-toolchains' }}
+          restore-keys: |
+            buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-
       
       - name: Build firmware with ccache
         run: |
@@ -135,7 +137,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ~/.buildroot-ccache
-          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/') }}
+          key: buildroot-ccache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.toolchains/*') || 'no-toolchains' }}
       
       - name: Cleanup toolchains
         run: |
