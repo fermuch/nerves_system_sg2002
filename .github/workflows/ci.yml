@@ -36,7 +36,6 @@ jobs:
             src:
               - Dockerfile
               - .github/docker-versions.env
-              - .github/workflows/ci.yml
 
       - name: Set image tag and build flag
         id: set-tag
