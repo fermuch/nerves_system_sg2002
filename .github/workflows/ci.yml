@@ -89,9 +89,8 @@ jobs:
       - name: Get Buildroot Dependencies
         run: |
           mix deps.get
-          ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
-          cd ~/temp_nerves_system
-          make source cvitekconfig create-nerves-dirs all
+          ./deps/nerves_system_br/create-build.sh nerves_defconfig
+          mix firmware
 
   deploy-system:
     needs: [build-system, build-docker]
