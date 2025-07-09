@@ -89,6 +89,15 @@ jobs:
       - name: Get Buildroot Dependencies
         run: |
           source /root/.asdf/asdf.sh
+          echo "=== ASDF Debug Info ==="
+          echo "PATH: $PATH"
+          echo "ASDF_DIR: $ASDF_DIR"
+          asdf --version
+          asdf current
+          asdf list
+          ls -la /root/.asdf/shims/
+          which mix || echo "mix not found in PATH"
+          echo "======================="
           asdf reshim
           mix deps.get
           ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
