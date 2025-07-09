@@ -88,8 +88,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get Buildroot Dependencies
         run: |
+          mix archive.install hex nerves_bootstrap
           mix deps.get
-          ./deps/nerves_system_br/create-build.sh nerves_defconfig
           mix firmware
 
   deploy-system:
