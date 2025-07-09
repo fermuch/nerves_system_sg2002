@@ -3,17 +3,43 @@ name: CI
 on: [push]
 
 env:
-  OTP_VERSION: 26.2.5
-  ELIXIR_VERSION: 1.18.4-otp-26
-  NERVES_BOOTSTRAP_VERSION: 1.13.1
+  OTP_VERSION: 28.0.1
+  ELIXIR_VERSION: 1.18.4-otp-28
+  NERVES_BOOTSTRAP_VERSION: 1.13.0
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 permissions:
   id-token: write
   contents: read
+  packages: write
 
 jobs:
-  get-br-dependencies:
+  build-docker:
     runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          build-args: |
+            OTP_VERSION=${{ env.OTP_VERSION }}
+            ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
+            NERVES_BOOTSTRAP_VERSION=${{ env.NERVES_BOOTSTRAP_VERSION }}
+
+  get-br-dependencies:
+    needs: build-docker
+    runs-on: ubuntu-20.04
+    container:
+      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: gridpoint-com/actions-nerves-system@v1
@@ -31,6 +57,8 @@ jobs:
   build-system:
     needs: [get-br-dependencies]
     runs-on: ubuntu-20.04
+    container:
+      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: gridpoint-com/actions-nerves-system@v1
@@ -44,6 +72,8 @@ jobs:
     needs: [build-system]
     if: github.ref_type == 'tag'
     runs-on: ubuntu-20.04
+    container:
+      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
     permissions:
       contents: write
     steps:

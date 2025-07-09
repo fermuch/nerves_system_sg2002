@@ -1,5 +1,9 @@
 FROM ubuntu:20.04
 
+ARG OTP_VERSION=28.0.1
+ARG ELIXIR_VERSION=1.18.4-otp-28
+ARG NERVES_BOOTSTRAP_VERSION=1.13.0
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install sudo and add a non-root user with UID and GID 1000
@@ -52,15 +56,15 @@ SHELL ["/bin/bash", "-c"]
 
 RUN source ~/.asdf/asdf.sh && \
     asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git && \
-    asdf install erlang 28.0.1 && \
-    asdf global erlang 28.0.1
+    asdf install erlang ${OTP_VERSION} && \
+    asdf global erlang ${OTP_VERSION}
 
 RUN source ~/.asdf/asdf.sh && \
     asdf plugin add elixir https://github.com/asdf-vm/asdf-elixir.git && \
-    asdf install elixir 1.18.4-otp-28 && \
-    asdf global elixir 1.18.4-otp-28
+    asdf install elixir ${ELIXIR_VERSION} && \
+    asdf global elixir ${ELIXIR_VERSION}
 
 RUN source ~/.asdf/asdf.sh && \
     asdf plugin add fwup https://github.com/fwup-home/asdf-fwup.git && \
-    asdf install fwup 1.13.0 && \
-    asdf global fwup 1.13.0
+    asdf install fwup ${NERVES_BOOTSTRAP_VERSION} && \
+    asdf global fwup ${NERVES_BOOTSTRAP_VERSION}
