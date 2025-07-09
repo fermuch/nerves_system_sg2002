@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build-docker:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ env.IMAGE_NAME }}:${{ github.sha }}
     steps:
@@ -39,7 +39,7 @@ jobs:
 
   get-br-dependencies:
     needs: build-docker
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ${{ needs.build-docker.outputs.image_tag }}
     steps:
@@ -58,7 +58,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
   build-system:
     needs: [get-br-dependencies, build-docker]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ${{ needs.build-docker.outputs.image_tag }}
     steps:
