@@ -41,7 +41,8 @@ SHELL ["/bin/bash", "-c"]
 
 RUN git clone https://github.com/asdf-vm/asdf.git /root/.asdf --branch v0.14.0 && \
     echo -e '\n. /root/.asdf/asdf.sh' >> /root/.bashrc && \
-    echo -e '\n. /root/.asdf/completions/asdf.bash' >> /root/.bashrc
+    echo -e '\n. /root/.asdf/completions/asdf.bash' >> /root/.bashrc && \
+    echo -e '\n. /root/.asdf/asdf.sh' >> /root/.profile
 
 RUN source /root/.bashrc && \
     asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git && \
