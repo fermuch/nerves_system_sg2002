@@ -16,6 +16,8 @@ permissions:
 jobs:
   build-docker:
     runs-on: ubuntu-20.04
+    outputs:
+      image_tag: ${{ env.IMAGE_NAME }}:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - name: Log in to the Container registry
@@ -39,7 +41,7 @@ jobs:
     needs: build-docker
     runs-on: ubuntu-20.04
     container:
-      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+      image: ${{ needs.build-docker.outputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
       - uses: gridpoint-com/actions-nerves-system@v1
@@ -55,10 +57,10 @@ jobs:
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
   build-system:
-    needs: [get-br-dependencies]
+    needs: [get-br-dependencies, build-docker]
     runs-on: ubuntu-20.04
     container:
-      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+      image: ${{ needs.build-docker.outputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
       - uses: gridpoint-com/actions-nerves-system@v1
@@ -69,11 +71,11 @@ jobs:
           elixir-version: ${{ env.ELIXIR_VERSION }}
           nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
   deploy-system:
-    needs: [build-system]
+    needs: [build-system, build-docker]
     if: github.ref_type == 'tag'
     runs-on: ubuntu-20.04
     container:
-      image: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+      image: ${{ needs.build-docker.outputs.image_tag }}
     permissions:
       contents: write
     steps:
