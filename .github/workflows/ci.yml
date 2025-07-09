@@ -23,9 +23,10 @@ jobs:
 
       - name: Load versions
         id: versions
-        uses: joerdav/load-file-as-env@v1
+        uses: akefirad/loadenv-action@main
         with:
-          path: .github/docker-versions.env
+          files: .github/docker-versions.env
+          export-vars: false
 
       - name: Check for Dockerfile or version changes
         uses: dorny/paths-filter@v3
