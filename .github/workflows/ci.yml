@@ -85,11 +85,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get Buildroot Dependencies
         run: |
+          whoami
+          ls -la
+          which asdf
+          which erl
+          which mix
+          pwd
           mix deps.get
           ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
           cd ~/temp_nerves_system
-          whoami
-          ls -la
           make source cvitekconfig create-nerves-dirs all
 
   deploy-system:
