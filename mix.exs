@@ -65,7 +65,7 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   defp deps do
     [
       {:nerves, "~> 1.11", runtime: false},
-      {:nerves_system_br, "1.29.3", runtime: false},
+      {:nerves_system_br, "1.26.0", runtime: false},
       # {:nerves_toolchain_riscv64_nerves_linux_musl, "~> 13.2.0", runtime: false},
       {:nerves_system_linter, "~> 0.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :docs, runtime: false}
@@ -122,7 +122,7 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   defp build_runner_opts() do
     # Download source files first to get download errors right away.
     [
-      make_args: primary_site() ++ ["source", "cvitekconfig", "uboot", "all", "legal-info"]
+      make_args: primary_site() ++ ["source", "cvitekconfig", "uboot", "create-nerves-dirs", "all", "legal-info"]
     ]
   end
 
