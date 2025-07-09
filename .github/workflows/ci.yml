@@ -97,14 +97,21 @@ jobs:
           asdf --version
           echo "Plugins directory:"
           ls -la /root/.asdf/plugins/ || echo "No plugins directory"
-          echo "Installed plugins:"
-          asdf plugin list || echo "No plugins found"
+          echo "Plugin registry files:"
+          ls -la /root/.asdf/plugins/*/bin/ || echo "No plugin bin directories"
+          echo "Manually adding plugins:"
+          cd /root/.asdf/plugins
+          for plugin in */; do
+            plugin_name=${plugin%/}
+            echo "Adding plugin: $plugin_name"
+            asdf plugin add $plugin_name || echo "Failed to add $plugin_name"
+          done
+          echo "After manual plugin addition:"
+          asdf plugin list
           echo "Current versions:"
           asdf current
           echo "All installed versions:"
           asdf list
-          ls -la /root/.asdf/shims/
-          which mix || echo "mix not found in PATH"
           echo "======================="
           asdf reshim
           mix deps.get
