@@ -76,43 +76,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  get-br-dependencies:
+  build-system:
     needs: build-docker
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.build-docker.outputs.image_tag }}
     steps:
       - uses: actions/checkout@v4
-      - uses: gridpoint-com/actions-nerves-system@v1
       - name: Get Buildroot Dependencies
-        uses: ./.actions/get-br-dependencies
-        with:
-          otp-version: ${{ needs.build-docker.outputs.otp_version }}
-          elixir-version: ${{ needs.build-docker.outputs.elixir_version }}
-          nerves-bootstrap-version: ${{ needs.build-docker.outputs.nerves_bootstrap_version }}
-          push-to-download-site: false
-          download-site-url: ${{ vars.PUBLIC_S3_SITE }}
-          download-site-bucket-uri: ${{ vars.S3_BUCKET }}
-          aws-role: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ vars.AWS_REGION }}
-  build-system:
-    needs: [get-br-dependencies, build-docker]
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ needs.build-docker.outputs.image_tag }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gridpoint-com/actions-nerves-system@v1
-      - name: Build nerves_system
-        uses: ./.actions/build-system
-        with:
-          otp-version: ${{ needs.build-docker.outputs.otp_version }}
-          elixir-version: ${{ needs.build-docker.outputs.elixir_version }}
-          nerves-bootstrap-version: ${{ needs.build-docker.outputs.nerves_bootstrap_version }}
+        run: |
+          mix deps.get
+          ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
+          cd ~/temp_nerves_system
+          make source cvitekconfig create-nerves-dirs all
+
   deploy-system:
     needs: [build-system, build-docker]
     if: github.ref_type == 'tag'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ${{ needs.build-docker.outputs.image_tag }}
     permissions:
