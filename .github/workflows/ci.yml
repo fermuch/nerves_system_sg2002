@@ -88,32 +88,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get Buildroot Dependencies
         run: |
-          export ASDF_DIR=/root/.asdf
-          export PATH="/root/.asdf/bin:/root/.asdf/shims:$PATH"
           source /root/.asdf/asdf.sh
-          echo "=== ASDF Debug Info ==="
-          echo "PATH: $PATH"
-          echo "ASDF_DIR: $ASDF_DIR"
-          asdf --version
-          echo "Plugins directory:"
-          ls -la /root/.asdf/plugins/ || echo "No plugins directory"
-          echo "Plugin registry files:"
-          ls -la /root/.asdf/plugins/*/bin/ || echo "No plugin bin directories"
-          echo "Manually adding plugins:"
-          cd /root/.asdf/plugins
-          for plugin in */; do
-            plugin_name=${plugin%/}
-            echo "Adding plugin: $plugin_name"
-            asdf plugin add $plugin_name || echo "Failed to add $plugin_name"
-          done
-          echo "After manual plugin addition:"
-          asdf plugin list
-          echo "Current versions:"
-          asdf current
-          echo "All installed versions:"
-          asdf list
-          echo "======================="
-          asdf reshim
           mix deps.get
           ./deps/nerves_system_br/create-build.sh nerves_defconfig ~/temp_nerves_system
           cd ~/temp_nerves_system
