@@ -91,10 +91,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.nerves/dl
-          key: nerves-dl-${{ github.ref_name }}-${{ github.sha }}
+          key: nerves-dl
           restore-keys: |
-            nerves-dl-${{ github.ref_name }}
-            nerves-dl-main
             nerves-dl
       
       - name: Get Buildroot Dependencies
@@ -107,7 +105,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ~/.nerves/dl
-          key: nerves-dl-${{ github.ref_name }}-${{ github.sha }}
+          key: nerves-dl
 
   deploy-system:
     needs: [build-system, build-docker]
