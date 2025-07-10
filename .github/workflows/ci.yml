@@ -75,8 +75,8 @@ jobs:
             NERVES_BOOTSTRAP_VERSION=${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  
-  cleanup:
+
+  build-system:
     needs: build-docker
     runs-on: ubuntu-latest
     steps:
@@ -91,28 +91,8 @@ jobs:
           docker-images: true
           swap-storage: true
 
-  build-system:
-    needs: [build-docker, cleanup]
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ needs.build-docker.outputs.image_tag }}
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-
       - uses: actions/checkout@v4
-      
+
       - name: Restore nerves downloads
         uses: actions/cache/restore@v4
         with:
@@ -120,18 +100,22 @@ jobs:
           key: nerves-dl
           restore-keys: |
             nerves-dl
-      
-      - name: Get Buildroot Dependencies
+
+      - name: Get Buildroot Dependencies and Build Firmware
         run: |
-          mix archive.install hex nerves_bootstrap --force
-          mix deps.get
-          mix firmware
-      
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -v ~/.nerves:/root/.nerves \
+            -w /workspace \
+            ${{ needs.build-docker.outputs.image_tag }} \
+            bash -c "mix archive.install hex nerves_bootstrap --force && mix deps.get && mix firmware"
+
       - name: Save nerves downloads cache
         uses: actions/cache/save@v4
         with:
           path: ~/.nerves/dl
           key: nerves-dl
+
 
   deploy-system:
     needs: [build-system, build-docker]
