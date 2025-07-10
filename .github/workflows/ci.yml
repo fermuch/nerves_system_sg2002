@@ -119,6 +119,8 @@ jobs:
 
       - name: Build Firmware
         run: |
+          rm -rf _build
+          rm -rf .nerves/artifacts/*
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -v ~/.nerves:/root/.nerves \
