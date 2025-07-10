@@ -117,7 +117,7 @@ jobs:
           push-to-download-site: false
           hex-validate: false
 
-      - name: Get Buildroot Dependencies and Build Firmware
+      - name: Build Firmware
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
@@ -125,6 +125,25 @@ jobs:
             -w /workspace \
             ${{ needs.build-docker.outputs.image_tag }} \
             bash -c "mix archive.install hex nerves_bootstrap --force && mix deps.get && mix firmware"
+      
+      - name: Create artifacts
+        shell: bash
+        run: |
+          mkdir -p deploy/system/artifacts
+          cp ./CHANGELOG.md deploy/system/CHANGELOG.md
+          mix nerves.artifact ${GITHUB_REPOSITORY#*/} --path deploy/system/artifacts
+      
+      - name: Store artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: deploy/system/artifacts
+          name: system
+      
+      - name: Save deploy cache
+        uses: actions/cache/save@v4
+        with:
+          path: deploy/system
+          key: deploy/system-${{ github.sha }}-${{ github.ref_name }}
 
 
   deploy-system:
