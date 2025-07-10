@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ARG OTP_VERSION=26.2.5
+ARG OTP_VERSION=27.3.4.1
 ARG ELIXIR_VERSION=1.18.4
 ARG NERVES_BOOTSTRAP_VERSION=1.13.0
 
@@ -46,9 +46,9 @@ RUN wget https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_
     rm -rf otp_src_${OTP_VERSION} otp_src_${OTP_VERSION}.tar.gz
 
 # Install Elixir directly
-RUN wget https://github.com/elixir-lang/elixir/releases/download/v${ELIXIR_VERSION}/elixir-otp-26.zip && \
-    unzip elixir-otp-26.zip -d /usr/local && \
-    rm elixir-otp-26.zip
+RUN wget https://github.com/elixir-lang/elixir/releases/download/v${ELIXIR_VERSION}/elixir-otp-27.zip && \
+    unzip elixir-otp-27.zip -d /usr/local && \
+    rm elixir-otp-27.zip
 
 # Install fwup directly
 RUN wget https://github.com/fwup-home/fwup/releases/download/v${NERVES_BOOTSTRAP_VERSION}/fwup_${NERVES_BOOTSTRAP_VERSION}_amd64.deb && \
