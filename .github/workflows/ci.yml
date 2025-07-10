@@ -104,14 +104,10 @@ jobs:
       - name: Get Buildroot Dependencies
         uses: ./.actions/get-br-dependencies
         with:
-          otp-version: ${{ env.OTP_VERSION }}
-          elixir-version: ${{ env.ELIXIR_VERSION }}
-          nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
-          push-to-download-site: true
-          download-site-url: ${{ vars.PUBLIC_S3_SITE }}
-          download-site-bucket-uri: ${{ vars.S3_BUCKET }}
-          aws-role: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ vars.AWS_REGION }}
+          otp-version: ${{ steps.versions.outputs.OTP_VERSION }}
+          elixir-version: ${{ steps.versions.outputs.ELIXIR_VERSION }}
+          nerves-bootstrap-version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
+          push-to-download-site: false
 
       - name: Get Buildroot Dependencies and Build Firmware
         run: |
