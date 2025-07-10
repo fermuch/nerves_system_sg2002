@@ -108,6 +108,7 @@ jobs:
           elixir-version: ${{ steps.versions.outputs.ELIXIR_VERSION }}
           nerves-bootstrap-version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
           push-to-download-site: false
+          hex-validate: false
 
       - name: Get Buildroot Dependencies and Build Firmware
         run: |
