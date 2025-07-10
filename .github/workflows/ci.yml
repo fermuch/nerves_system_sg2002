@@ -116,6 +116,10 @@ jobs:
           nerves-bootstrap-version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
           push-to-download-site: false
           hex-validate: false
+      
+      - name: Clone nerves_system_br scripts
+        run: |
+          cp -r deps/nerves_system_br/scripts/ .nerves/artifacts/nerves_system_sg2002-*/
 
       - name: Build Firmware
         run: |
