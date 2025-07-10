@@ -75,6 +75,21 @@ jobs:
             NERVES_BOOTSTRAP_VERSION=${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  
+  cleanup:
+    needs: build-docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
   build-system:
     needs: build-docker
