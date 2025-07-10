@@ -123,6 +123,7 @@ jobs:
           rm -rf .nerves/artifacts/*
           rm -rf deps/nerves_system_br
           docker run --rm \
+            -e FORCE_UNSAFE_CONFIGURE=1 \
             -v ${{ github.workspace }}:/workspace \
             -v ~/.nerves:/root/.nerves \
             -w /workspace \
