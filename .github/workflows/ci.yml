@@ -121,6 +121,7 @@ jobs:
         run: |
           rm -rf _build
           rm -rf .nerves/artifacts/*
+          rm -rf deps/nerves_system_br
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -v ~/.nerves:/root/.nerves \
