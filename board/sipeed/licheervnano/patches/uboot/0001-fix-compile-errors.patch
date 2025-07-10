@@ -44,14 +44,26 @@ index 12cdefac84..9fea234ba0 100644
 --- a/include/configs/mars-asic.h
 +++ b/include/configs/mars-asic.h
 @@ -181,6 +181,8 @@
- #define CONFIG_GATEWAYIP               192.168.0.11
- #define CONFIG_SERVERIP                        192.168.56.101
+ #define CONFIG_GATEWAYIP		192.168.0.11
+ #define CONFIG_SERVERIP			192.168.56.101
  
 +#define CONFIG_SYS_VIDEO_LOGO_MAX_SIZE (6 * 1024 * 1024)
 +
  #ifdef CONFIG_USE_DEFAULT_ENV
  /* The following Settings are chip dependent */
  /******************************************************************************/
+diff --git a/cmd/bmp.c b/cmd/bmp.c
+--- a/cmd/bmp.c
++++ b/cmd/bmp.c
+@@ -22,6 +22,8 @@
+ #include <video.h>
+ #include <asm/byteorder.h>
+ 
++#define CONFIG_SYS_VIDEO_LOGO_MAX_SIZE (6 * 1024 * 1024)
++
+ static int bmp_info (ulong addr);
+ 
+ /*
 -- 
 2.44.0
 
