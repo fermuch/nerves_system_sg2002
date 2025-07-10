@@ -92,7 +92,7 @@ jobs:
           swap-storage: true
 
   build-system:
-    needs: build-docker
+    needs: [build-docker, cleanup]
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.build-docker.outputs.image_tag }}
