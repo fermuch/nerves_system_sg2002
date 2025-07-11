@@ -80,16 +80,16 @@ jobs:
     needs: build-docker
     runs-on: ubuntu-latest
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: false
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: true
+      #     swap-storage: true
 
       - uses: actions/checkout@v4
 
@@ -116,12 +116,6 @@ jobs:
           nerves-bootstrap-version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
           push-to-download-site: false
           hex-validate: false
-      
-      - name: Clone nerves_system_br scripts
-        run: |
-          mix deps.get
-          cp -r deps/nerves_system_br/scripts/ .nerves/artifacts/nerves_system_sg2002-*/
-          cp -r deps/nerves_system_br/scripts/ .nerves/artifacts/nerves_system_sg2002-*/
 
       - name: Build Firmware
         run: |
