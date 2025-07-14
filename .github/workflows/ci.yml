@@ -122,6 +122,7 @@ jobs:
           rm -rf _build
           rm -rf .nerves/artifacts/*
           rm -rf deps/nerves_system_br
+          export NERVES_IMAGE_TAG=${{ needs.build-docker.outputs.image_tag }}
           mix archive.install hex nerves_bootstrap --force
           mix deps.get
           mix firmware
