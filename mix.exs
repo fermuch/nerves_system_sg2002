@@ -30,7 +30,6 @@ defmodule NervesSystemMangopiMQPro.MixProject do
 
   defp bootstrap(args) do
     set_target()
-    set_toolchain()
     Application.start(:nerves_bootstrap)
     Mix.Task.run("loadconfig", args)
   end
@@ -71,7 +70,7 @@ defmodule NervesSystemMangopiMQPro.MixProject do
     [
       {:nerves, "~> 1.11", runtime: false},
       {:nerves_system_br, "1.31.3", runtime: false},
-      # {:nerves_toolchain_riscv64_nerves_linux_musl, "~> 13.2.0", runtime: false},
+      {:nerves_toolchain_riscv64_nerves_linux_musl, "~> 13.2.0", runtime: false},
       {:nerves_system_linter, "~> 0.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :docs, runtime: false}
     ]
@@ -139,16 +138,10 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   end
 
   defp set_target() do
-    # if function_exported?(Mix, :target, 1) do
-    #   apply(Mix, :target, [:target])
-    # else
-    #   System.put_env("MIX_TARGET", "target")
-    # end
-  end
-
-  defp set_toolchain() do
-    if !System.get_env("NERVES_TOOLCHAIN") do
-      System.put_env("NERVES_TOOLCHAIN", "riscv64-buildroot-linux-musl")
+    if function_exported?(Mix, :target, 1) do
+      apply(Mix, :target, [:target])
+    else
+      System.put_env("MIX_TARGET", "target")
     end
   end
 end
