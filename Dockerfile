@@ -57,3 +57,4 @@ RUN wget https://github.com/fwup-home/fwup/releases/download/v${NERVES_BOOTSTRAP
 
 # Update PATH to include Elixir binaries
 ENV PATH="/usr/local/bin:${PATH}"
+ENV FORCE_UNSAFE_CONFIGURE=1

@@ -122,13 +122,9 @@ jobs:
           rm -rf _build
           rm -rf .nerves/artifacts/*
           rm -rf deps/nerves_system_br
-          docker run --rm \
-            -e FORCE_UNSAFE_CONFIGURE=1 \
-            -v ${{ github.workspace }}:/workspace \
-            -v ~/.nerves:/root/.nerves \
-            -w /workspace \
-            ${{ needs.build-docker.outputs.image_tag }} \
-            bash -c "mix archive.install hex nerves_bootstrap --force && mix deps.get && mix firmware"
+          mix archive.install hex nerves_bootstrap --force
+          mix deps.get
+          mix firmware
       
       - name: Create artifacts
         shell: bash
