@@ -122,6 +122,8 @@ jobs:
           rm -rf _build
           rm -rf .nerves/artifacts/*
           rm -rf deps/nerves_system_br
+          # needed for nerves docker in github runners
+          mkdir -p $HOME/.ssh
           export NERVES_IMAGE_TAG=${{ needs.build-docker.outputs.image_tag }}
           mix archive.install hex nerves_bootstrap --force
           mix deps.get
