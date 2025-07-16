@@ -44,10 +44,10 @@ defmodule NervesSystemMangopiMQPro.MixProject do
       # artifact_sites: [
       #   {:github_releases, "#{@github_organization}/#{@app}"}
       # ],
-      build_runner:  Nerves.Artifact.BuildRunners.Docker,
-      build_runner_config: [
-        docker: {"Dockerfile", get_image_tag()}
-      ],
+      # build_runner:  Nerves.Artifact.BuildRunners.Docker,
+      # build_runner_config: [
+      #   docker: {"Dockerfile", get_image_tag()}
+      # ],
       build_runner_opts: build_runner_opts(),
       platform: Nerves.System.BR,
       platform_config: [
