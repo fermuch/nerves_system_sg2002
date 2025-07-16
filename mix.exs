@@ -1,4 +1,4 @@
-defmodule NervesSystemMangopiMQPro.MixProject do
+defmodule NervesSystemSG2002.MixProject do
   use Mix.Project
 
   @github_organization "fermuch"
@@ -41,13 +41,9 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   defp nerves_package do
     [
       type: :system,
-      # artifact_sites: [
-      #   {:github_releases, "#{@github_organization}/#{@app}"}
-      # ],
-      # build_runner:  Nerves.Artifact.BuildRunners.Docker,
-      # build_runner_config: [
-      #   docker: {"Dockerfile", get_image_tag()}
-      # ],
+      artifact_sites: [
+        {:github_releases, "#{@github_organization}/#{@app}"}
+      ],
       build_runner_opts: build_runner_opts(),
       platform: Nerves.System.BR,
       platform_config: [
@@ -138,13 +134,6 @@ defmodule NervesSystemMangopiMQPro.MixProject do
       apply(Mix, :target, [:target])
     else
       System.put_env("MIX_TARGET", "target")
-    end
-  end
-
-  defp get_image_tag() do
-    case System.get_env("NERVES_IMAGE_TAG") do
-      nil -> "fermuch/nerves_system_sg2002:#{@version}"
-      image_tag -> image_tag
     end
   end
 end
