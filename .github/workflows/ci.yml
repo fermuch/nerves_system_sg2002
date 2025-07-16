@@ -3,164 +3,47 @@ name: CI
 on: [push]
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+  OTP_VERSION: 27.3.4
+  ELIXIR_VERSION: 1.18.4-otp-27
+  NERVES_BOOTSTRAP_VERSION: 1.13.1
 
 permissions:
   id-token: write
   contents: read
-  packages: write
 
 jobs:
-  build-docker:
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.set-tag.outputs.tag }}
-      otp_version: ${{ steps.versions.outputs.OTP_VERSION }}
-      elixir_version: ${{ steps.versions.outputs.ELIXIR_VERSION }}
-      nerves_bootstrap_version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
+  get-br-dependencies:
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-
-      - name: Load versions
-        id: versions
-        uses: akefirad/loadenv-action@main
-        with:
-          files: .github/docker-versions.env
-          export-vars: false
-
-      - name: Check for Dockerfile or version changes
-        uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            src:
-              - Dockerfile
-              - .github/docker-versions.env
-
-      - name: Set image tag and build flag
-        id: set-tag
-        run: |
-          if [[ "${{ steps.changes.outputs.src }}" == "true" ]]; then
-            echo "tag=${{ env.IMAGE_NAME }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "should_build=true" >> $GITHUB_OUTPUT
-          else
-            echo "tag=${{ env.IMAGE_NAME }}:main" >> $GITHUB_OUTPUT
-            echo "should_build=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Log in to the Container registry
-        if: steps.set-tag.outputs.should_build == 'true'
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        if: steps.set-tag.outputs.should_build == 'true'
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push Docker image
-        if: steps.set-tag.outputs.should_build == 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ steps.set-tag.outputs.tag }}
-            ${{ github.ref_name == 'main' && format('{0}:main', env.IMAGE_NAME) }}
-          build-args: |
-            OTP_VERSION=${{ steps.versions.outputs.OTP_VERSION }}
-            ELIXIR_VERSION=${{ steps.versions.outputs.ELIXIR_VERSION }}
-            NERVES_BOOTSTRAP_VERSION=${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  build-system:
-    needs: build-docker
-    runs-on: ubuntu-latest
-    steps:
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: false
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
-
-      - uses: actions/checkout@v4
-
-      - name: Load versions
-        id: versions
-        uses: akefirad/loadenv-action@main
-        with:
-          files: .github/docker-versions.env
-          export-vars: false
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Install fwup in the runner
-        run: |
-          curl -L https://github.com/fwup-home/fwup/releases/download/v1.13.0/fwup_1.13.0_amd64.deb -o fwup.deb
-          sudo dpkg -i fwup.deb
-          fwup --version
-
       - uses: gridpoint-com/actions-nerves-system@v1
       - name: Get Buildroot Dependencies
         uses: ./.actions/get-br-dependencies
         with:
-          otp-version: ${{ steps.versions.outputs.OTP_VERSION }}
-          elixir-version: ${{ steps.versions.outputs.ELIXIR_VERSION }}
-          nerves-bootstrap-version: ${{ steps.versions.outputs.NERVES_BOOTSTRAP_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
           push-to-download-site: false
-          hex-validate: false
-
-      - name: Build Firmware
-        run: |
-          rm -rf _build
-          rm -rf .nerves/artifacts/*
-          rm -rf deps/nerves_system_br
-          # needed for nerves docker in github runners
-          mkdir -p $HOME/.ssh
-          export NERVES_IMAGE_TAG=${{ needs.build-docker.outputs.image_tag }}
-          mix archive.install hex nerves_bootstrap --force
-          mix deps.get
-          mix firmware
-      
-      - name: Create artifacts
-        shell: bash
-        run: |
-          mkdir -p deploy/system/artifacts
-          cp ./CHANGELOG.md deploy/system/CHANGELOG.md
-          mix nerves.artifact ${GITHUB_REPOSITORY#*/} --path deploy/system/artifacts
-      
-      - name: Store artifacts
-        uses: actions/upload-artifact@v4
+          download-site-url: ${{ vars.PUBLIC_S3_SITE }}
+          download-site-bucket-uri: ${{ vars.S3_BUCKET }}
+          aws-role: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+  build-system:
+    needs: [get-br-dependencies]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gridpoint-com/actions-nerves-system@v1
+      - name: Build nerves_system
+        uses: ./.actions/build-system
         with:
-          path: deploy/system/artifacts
-          name: system
-      
-      - name: Save deploy cache
-        uses: actions/cache/save@v4
-        with:
-          path: deploy/system
-          key: deploy/system-${{ github.sha }}-${{ github.ref_name }}
-
-
+          otp-version: ${{ env.OTP_VERSION }}
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
   deploy-system:
-    needs: [build-system, build-docker]
+    needs: [build-system]
     if: github.ref_type == 'tag'
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ needs.build-docker.outputs.image_tag }}
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
