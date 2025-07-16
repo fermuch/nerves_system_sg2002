@@ -106,19 +106,15 @@ defmodule NervesSystemMangopiMQPro.MixProject do
   defp package_files do
     [
       "fwup_include",
-      "linux",
       "rootfs_overlay",
       "uboot",
       "CHANGELOG.md",
       "fwup-ops.conf",
       "fwup.conf",
-      "LICENSES/*",
       "mix.exs",
       "nerves_defconfig",
       "post-build.sh",
       "post-createfs.sh",
-      "README.md",
-      "REUSE.toml",
       "VERSION"
     ]
   end
