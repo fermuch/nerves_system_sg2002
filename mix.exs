@@ -118,7 +118,7 @@ defmodule NervesSystemSG2002.MixProject do
   defp build_runner_opts() do
     # Download source files first to get download errors right away.
     [
-      make_args: primary_site() ++ ["source", "cvitekconfig", "create-nerves-dirs", "all"]
+      make_args: primary_site() ++ ["source", "cvitekconfig", "sg2002-nerves-fixes", "all"]
     ]
   end
 
