@@ -58,10 +58,25 @@ diff '--color=auto' -ruNp a/tools/mkenvimage.c b/tools/mkenvimage.c
  /* parameters initialized by core will be used by the image type code */
 --- /dev/null
 +++ b/include/imgs.h
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,13 @@
++#include <common.h>
++#ifdef CONFIG_ENV_IS_IN_MMC
++char imgs[][255] = {"fip.bin",
++"boot.emmc",
++"rootfs_ext4.emmc",
++};
++#else
 +char imgs[][255] = {"boot.sd",
 +"rootfs.sd",
 +"data.sd",
 +};
++#endif
 +
----
+# --- a/cmd/nvedit.c
+# +++ b/cmd/nvedit.c
+# @@ -44,3 +44,4 @@
+#  #include <asm/io.h>
+# +#include <config.h>
+
+#  DECLARE_GLOBAL_DATA_PTR;
+# ---
