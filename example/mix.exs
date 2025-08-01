@@ -3,7 +3,7 @@ defmodule Example.MixProject do
 
   @app :example
   @version "0.1.0"
-  @all_targets [:sg2002]
+  @all_targets [:nerves_system_sg2002]
 
   def project do
     [
@@ -47,7 +47,7 @@ defmodule Example.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_sg2002, github: "fermuch/nerves_system_sg2002", runtime: false, targets: :sg2002}
+      {:nerves_system_sg2002, path: "../", runtime: false, targets: :nerves_system_sg2002, nerves: [compile: true]}
     ]
   end
 
