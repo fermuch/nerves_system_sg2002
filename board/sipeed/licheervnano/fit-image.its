@@ -26,7 +26,7 @@
     
         dtb@1 {
             description = "Device tree";
-            data = /incbin/("./sg2002_licheervnano_sd.dtb");
+            data = /incbin/("./sg2002_recamera_sd.dtb");
             type = "flat_dt";
             arch = "riscv";
             compression = "none";
@@ -38,10 +38,10 @@
 
 	/*CFG*/
     configurations {
-        default = "config-sg2002_licheervnano_sd";
+        default = "config-sg2002_recamera_sd";
 
-        config-sg2002_licheervnano_sd {
-            description = "boot sg2002_licheervnano_sd";
+        config-sg2002_recamera_sd {
+            description = "boot sg2002_recamera_sd";
             kernel = "kernel@1";
             fdt = "dtb@1";
         };
