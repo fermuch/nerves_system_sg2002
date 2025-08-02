@@ -39,19 +39,6 @@ index d05670f5ee..ff0a0ebd2d 100644
  	/* 2. Test if splash is in FIT external data with fixed position. */
  	else if (!fit_image_get_data_position(fit_header, node_offset, &external_splash_addr))
  		is_splash_external = true;
-diff --git a/include/configs/mars-asic.h b/include/configs/mars-asic.h
-index 12cdefac84..9fea234ba0 100644
---- a/include/configs/mars-asic.h
-+++ b/include/configs/mars-asic.h
-@@ -181,6 +181,8 @@
- #define CONFIG_GATEWAYIP		192.168.0.11
- #define CONFIG_SERVERIP			192.168.56.101
- 
-+#define CONFIG_SYS_VIDEO_LOGO_MAX_SIZE (6 * 1024 * 1024)
-+
- #ifdef CONFIG_USE_DEFAULT_ENV
- /* The following Settings are chip dependent */
- /******************************************************************************/
 diff --git a/cmd/bmp.c b/cmd/bmp.c
 --- a/cmd/bmp.c
 +++ b/cmd/bmp.c
