@@ -5,6 +5,7 @@
 #include "cv181x_default_memmap.dtsi"
 
 &sd {
+	status = "okay";
 	no-1-8-v;
 };
 
