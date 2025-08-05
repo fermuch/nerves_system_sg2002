@@ -3,7 +3,7 @@ defmodule Example.LEDToggle do
   require Logger
 
   @led_path "/sys/devices/platform/leds/leds/white/brightness"
-  @toggle_interval 10_000  # 10 seconds in milliseconds
+  @toggle_interval 3_000  # 3 seconds in milliseconds
 
   # Client API
 
