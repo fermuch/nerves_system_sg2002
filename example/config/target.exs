@@ -93,3 +93,16 @@ config :mdns_lite,
 # Uncomment to use target specific configurations
 
 # import_config "#{Mix.target()}.exs"
+
+import_config "secrets.exs"
+
+config :logger, :default_handler, false
+
+config :nerves, :firmware,
+  provisioning: :nerves_hub_link
+
+config :nerves_hub_link,
+  # Replace this with your instance device endpoint if hosting your own
+  host: "devices.nervescloud.com",
+  # Enable the very nice remote console
+  remote_iex: true
