@@ -48,15 +48,15 @@ defmodule NervesSystemSG2002.MixProject do
       platform_config: [
         defconfig: "nerves_defconfig"
       ],
-      # baseline_rv64 enables the a, c, d, and m extensions in zig
-      env: [
-        {"TARGET_ARCH", "riscv64"},
-        {"TARGET_CPU", "baseline_rv64"},
-        {"TARGET_OS", "linux"},
-        {"TARGET_ABI", "gnu"},
-        {"TARGET_GCC_FLAGS",
-         "-mabi=lp64d -fstack-protector-strong -march=rv64imafdcv_zicsr_zifencei -fPIE -pie -Wl,-z,now -Wl,-z,relro"}
-      ],
+      # # baseline_rv64 enables the a, c, d, and m extensions in zig
+      # env: [
+      #   {"TARGET_ARCH", "riscv64"},
+      #   {"TARGET_CPU", "baseline_rv64"},
+      #   {"TARGET_OS", "linux"},
+      #   {"TARGET_ABI", "gnu"},
+      #   {"TARGET_GCC_FLAGS",
+      #    "-mabi=lp64d -fstack-protector-strong -march=rv64imafdcv_zicsr_zifencei -fPIE -pie -Wl,-z,now -Wl,-z,relro"}
+      # ],
       checksum: package_files()
     ]
   end
