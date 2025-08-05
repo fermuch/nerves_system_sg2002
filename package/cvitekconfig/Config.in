@@ -19,6 +19,11 @@ choice BR2_PACKAGE_CVITEK_BOARD
 		bool "Test"
 		help
 		  Select this option if you are using a test board.
+
+	config BR2_PACKAGE_CVITEKCONFIG_BOARD_RECAMERA
+		bool "Seeed reCamera"
+		help
+		  Select this option if you are using a Seeed reCamera board.
 endchoice
 
 config BR2_PACKAGE_CVITEKCONFIG_ALLOCATE_FREERTOS_HEAP
@@ -181,6 +186,42 @@ if BR2_PACKAGE_CVITEKCONFIG_BOARD_LICHEERVNANO
 	config BR2_PACKAGE_CVITEKCONFIG_CHIPCODE
 		string
 		default mars
+
+	config BR2_PACKAGE_CVITEKCONFIG_LIBC
+		string
+		default "musl"
+
+endif
+
+if BR2_PACKAGE_CVITEKCONFIG_BOARD_RECAMERA
+
+	config BR2_PACKAGE_CVITEKCONFIG_DDR 	
+		string
+		default "ddr3_1866_x16"
+
+	config BR2_PACKAGE_CVITEKCONFIG_CHIP
+		string
+		default "sg2002"
+
+	config BR2_PACKAGE_CVITEKCONFIG_CHIPCODE
+		string
+		default "mars"
+
+	config BR2_PACKAGE_CVITEKCONFIG_CHIP_ARCH
+		string
+		default "sg200x"
+
+	config BR2_PACKAGE_CVITEKCONFIG_ARCH
+		string
+		default "riscv"
+
+	config BR2_PACKAGE_CVITEKCONFIG_BOARD_NAME
+		string
+		default "recamera"
+
+	config BR2_PACKAGE_CVITEKCONFIG_STORAGE
+		string
+		default "sd"
 
 	config BR2_PACKAGE_CVITEKCONFIG_LIBC
 		string
