@@ -13,9 +13,9 @@ index 598674e..6b0066e 100644
  ifeq (,$(wildcard ${PM_SRAM_BIN_PATH}))
  	ifeq (${CHIP_ARCH},CV180X)
  		PM_SRAM_BIN_PATH=${OPENSBI_PATH}/pm_default_cv180x.bin
-@@ -217,7 +221,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
- GENFLAGS	+=	$(platform-genflags-y)
- GENFLAGS	+=	$(firmware-genflags-y)
+@@ -229,7 +237,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
+ $(eval $(call add_define,CONFIG_OPENSBI_FASTBOOT))
+ endif
  
 -CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
 +CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
