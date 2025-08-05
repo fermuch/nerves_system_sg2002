@@ -34,9 +34,7 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
-        # Children for all targets except host
-        # Starts a worker by calling: Target.Worker.start_link(arg)
-        # {Target.Worker, arg},
+        {Example.LEDToggle, name: Example.LEDToggle},
       ]
     end
   end

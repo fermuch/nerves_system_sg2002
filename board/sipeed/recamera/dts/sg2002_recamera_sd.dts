@@ -105,7 +105,7 @@
 
 		led2 {
 			label = "white";
-			gpios = <&porte 0 1>;
+			gpios = <&porte 0 0>;
 			default-state = "off";
 		};
 	};
