@@ -83,3 +83,7 @@ class MemoryMap:
     CONFIG_SYS_TEXT_BASE = DRAM_BASE + 2 * SIZE_1M
     # u-boot's init stack point is only used before board_init_f()
     CONFIG_SYS_INIT_SP_ADDR = UIMAG_ADDR + UIMAG_SIZE
+    
+    # Environment storage configuration
+    CONFIG_ENV_SIZE = 128 * SIZE_1K  # 128 KiB
+    CONFIG_ENV_OFFSET = 4 * SIZE_1M   # 4 MiB offset

@@ -3,6 +3,8 @@
 #ifndef CVIPART_H
 #define CVIPART_H
 #define CONFIG_ENV_SIZE 0x20000
+#define CONFIG_ENV_OFFSET 0x400000
+#define CONFIG_ENV_IS_IN_MMC 1
 #define PART_LAYOUT ""
 #define ROOTFS_DEV "/dev/mmcblk0p2"
 #define PARTS_OFFSET ""

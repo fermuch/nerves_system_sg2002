@@ -101,7 +101,7 @@ defmodule NervesSystemSG2002.MixProject do
   defp package_files do
     [
       "fwup_include",
-      "rootfs_overlay",
+      "rootfs-overlay",
       "uboot",
       "CHANGELOG.md",
       "fwup-ops.conf",
