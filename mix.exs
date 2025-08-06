@@ -55,8 +55,6 @@ defmodule NervesSystemSG2002.MixProject do
         {"TARGET_CPU", "baseline_rv64"},
         {"TARGET_OS", "linux"},
         {"TARGET_ABI", "gnu"},
-        {"TARGET_GCC_FLAGS",
-         "-mabi=lp64d -fstack-protector-strong -march=rv64imafdcv_zicsr_zifencei -fPIE -pie -Wl,-z,now -Wl,-z,relro"}
       ],
       checksum: package_files()
     ]
