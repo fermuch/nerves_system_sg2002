@@ -45,9 +45,6 @@ defmodule NervesSystemSG2002.MixProject do
       ],
       build_runner: Nerves.Artifact.BuildRunners.Docker,
       build_runner_opts: build_runner_opts(),
-      build_runner_config: [
-        docker: {"Dockerfile", "nerves-system-br:latest"}
-      ],
       platform: Nerves.System.BR,
       platform_config: [
         defconfig: "nerves_defconfig"
