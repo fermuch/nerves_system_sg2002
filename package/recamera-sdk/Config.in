@@ -1,0 +1,5 @@
+config BR2_PACKAGE_RECAMERA_SDK
+    bool "reCameraOS SDK"
+    help
+      Fetch and stage the reCameraOS SDK drop used by SSCMA-based components.
+
