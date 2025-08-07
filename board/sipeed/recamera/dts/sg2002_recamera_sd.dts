@@ -85,6 +85,7 @@
 
 	/delete-node/ cvi-spif@10000000;
 	/delete-node/ cv-spinf@4060000;
+	/delete-node/ cv-wd@0x3010000;
 
 	leds {
 		compatible = "gpio-leds";
@@ -116,5 +117,15 @@
 		compatible = "cvitek,wifi-pin";
 		poweron-gpio = <&porta 30 1>;
 		/*wakeup-gpio = <&porte 8 1>;*/
+	};
+
+	soc {
+		watchdog0: cv-wd@0x3010000 {
+			compatible = "snps,dw-wdt";
+			reg = <0x0 0x03010000 0x0 0x1000>;
+			resets = <&rst RST_WDT>;
+			interrupts = <58 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&pclk>;
+		};
 	};
 };
