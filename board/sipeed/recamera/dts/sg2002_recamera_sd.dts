@@ -128,4 +128,29 @@
 			clocks = <&pclk>;
 		};
 	};
+
+	// Camera (MIPI CSI)
+	mipi_rx: cif {
+		compatible = "cvitek,cif";
+		reg = <0x0 0x0a0c2000 0x0 0x2000>, <0x0 0x0a0d0000 0x0 0x1000>,
+		      <0x0 0x0a0c4000 0x0 0x2000>, <0x0 0x0a0c6000 0x0 0x2000>,
+		      <0x0 0x03001c30 0x0 0x30>;
+		reg-names = "csi_mac0", "csi_wrap0", "csi_mac1", "csi_mac2", "pad_ctrl";
+		snsr-reset = <&porta 2 GPIO_ACTIVE_LOW>, <&porta 2 GPIO_ACTIVE_LOW>, <&porta 2 GPIO_ACTIVE_LOW>;
+		resets = <&rst RST_CSIPHY0>, <&rst RST_CSIPHY1>,
+			<&rst RST_CSIPHY0RST_APB>, <&rst RST_CSIPHY1RST_APB>;
+		reset-names = "phy0", "phy1", "phy-apb0", "phy-apb1";
+		clocks = <&clk CV181X_CLK_CAM0>, <&clk CV181X_CLK_CAM1>, <&clk CV181X_CLK_SRC_VIP_SYS_2>,
+			 <&clk CV181X_CLK_MIPIMPLL>, <&clk CV181X_CLK_DISPPLL>, <&clk CV181X_CLK_FPLL>;
+		clock-names = "clk_cam0", "clk_cam1", "clk_sys_2",
+			      "clk_mipimpll", "clk_disppll", "clk_fpll";
+	};
+	mipi_tx: mipi_tx {
+		compatible = "cvitek,mipi_tx";
+		reset-gpio = <&porte 2 GPIO_ACTIVE_LOW>;
+		pwm-gpio = <&porte 0 GPIO_ACTIVE_HIGH>;
+		power-ct-gpio = <&porte 1 GPIO_ACTIVE_HIGH>;
+		clocks = <&clk CV181X_CLK_DISP_VIP>, <&clk CV181X_CLK_DSI_MAC_VIP>;
+		clock-names = "clk_disp", "clk_dsi";
+	};
 };
