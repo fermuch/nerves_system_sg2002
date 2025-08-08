@@ -1,0 +1,56 @@
+diff --git a/components/sophgo/audio/CMakeLists.txt b/components/sophgo/audio/CMakeLists.txt
+index db3c2f8..2d5a53d 100644
+--- a/components/sophgo/audio/CMakeLists.txt
++++ b/components/sophgo/audio/CMakeLists.txt
+@@ -9,8 +9,19 @@ set(AUDIO_INC
+ # )
+ 
+ set(AUDIO_RREQIRDS atomic pthread 
+-    tinyalsa cvi_audio cvi_dnvqe cvi_ssp cvi_ssp2 cvi_vqe cvi_VoiceEngine cvi_RES1
+-    aacdec2 aacenc2 aaccomm2 aacsbrdec2 aacsbrenc2
++    tinyalsa 
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_audio.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_dnvqe.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_ssp.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_ssp2.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_vqe.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_VoiceEngine.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_RES1.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaacdec2.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaacenc2.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaaccomm2.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaacsbrdec2.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaacsbrenc2.a
+ )
+ 
+ # set(SUPPORT_EXTERNAL_AAC yes)
+diff --git a/components/sophgo/video/CMakeLists.txt b/components/sophgo/video/CMakeLists.txt
+index 1c3f12f..a3982f7 100644
+--- a/components/sophgo/video/CMakeLists.txt
++++ b/components/sophgo/video/CMakeLists.txt
+@@ -8,6 +8,23 @@ file(GLOB VIDEO_SRC
+     "${CMAKE_CURRENT_LIST_DIR}/src/*.c"
+ )
+ 
+-set(VIDEO_RREQIRDS ae af atomic awb cvi_bin cvi_bin_isp isp isp_algo sys venc vpss gdc vi vo
+-    cvi_ispd2 json-c sns_ov5647 sns_sc530ai_2l
++set(VIDEO_RREQIRDS 
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libae.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libaf.a
++    atomic
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libawb.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_bin.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_bin_isp.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libisp.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libisp_algo.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libsys.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libvenc.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libvpss.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libgdc.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libvi.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libvo.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libcvi_ispd2.a
++    json-c
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libsns_ov5647.a
++    ${SG200X_SDK_PATH}/cvi_mpi/lib/libsns_sc530ai_2l.a
+ )

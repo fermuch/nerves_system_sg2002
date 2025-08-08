@@ -1,0 +1,12 @@
+diff --git a/components/sscma-micro/CMakeLists.txt b/components/sscma-micro/CMakeLists.txt
+index 925bc83..23e64eb 100644
+--- a/components/sscma-micro/CMakeLists.txt
++++ b/components/sscma-micro/CMakeLists.txt
+@@ -14,6 +14,7 @@ file(GLOB_RECURSE CLIENT_SOURCES ${SSCMA_ROOT_DIR}/sscma/client/*.c ${SSCMA_ROOT
+ file(GLOB_RECURSE PORT_SOURCES ${SSCMA_ROOT_DIR}/sscma/porting/posix/*.c ${SSCMA_ROOT_DIR}/sscma/porting/posix/*.cpp  ${SSCMA_ROOT_DIR}/sscma/porting/osal/ma_osal_pthread.cpp)
+ 
+ file(GLOB_RECURSE PORTING_SOURCES ${SSCMA_PORTING_DIR}/*.c ${SSCMA_PORTING_DIR}/*.cpp)
++list(REMOVE_ITEM PORTING_SOURCES ${SSCMA_PORTING_DIR}/sophgo/ma_transport_rtsp.cpp)
+ 
+ file(GLOB_RECURSE BYTETRACK_SSCMA_SOURCES ${SSCMA_ROOT_DIR}/sscma/extension/bytetrack/*.c ${SSCMA_ROOT_DIR}/sscma/extension/bytetrack/*.cpp)
+ 

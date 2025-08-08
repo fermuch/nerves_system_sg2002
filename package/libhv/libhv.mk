@@ -7,11 +7,11 @@
 LIBHV_VERSION = v1.3.3
 LIBHV_SOURCE = $(LIBHV_VERSION).tar.gz
 LIBHV_SITE = https://github.com/ithewei/libhv/archive/refs/tags
-LIBHV_DEPENDENCIES = openssl
+LIBHV_DEPENDENCIES = openssl c-ares
 LIBHV_INSTALL_STAGING = YES
 
 define LIBHV_CONFIGURE_CMDS
-	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure --with-mqtt --with-openssl)
+    (cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure --with-mqtt --with-openssl --with-cares)
 endef
 
 define LIBHV_BUILD_CMDS
