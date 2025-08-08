@@ -31,16 +31,12 @@ define SSCMA_NODE_CONFIGURE_CMDS
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_SYSROOT="$(STAGING_DIR)" \
       -DCMAKE_PREFIX_PATH="$(STAGING_DIR)/usr" \
-      -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/alsa -include alsa/asoundlib.h" \
-      -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/alsa -include alsa/asoundlib.h" \
+      -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/alsa" \
+      -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/alsa" \
       -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS) \
         -L$(STAGING_DIR)/usr/lib64/lp64d \
         -L$(STAGING_DIR)/usr/lib \
-        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib64/lp64d:$(STAGING_DIR)/usr/lib \
-        -Wl,--as-needed \
-        -l:libssl.so.3 -l:libcrypto.so.3 -Wl,--no-as-needed \
-        -lasound -ldl \
-        -Wl,--exclude-libs,libavformat.so,libavcodec.so,libavutil.so" \
+        -lasound -ldl" \
       -DCMAKE_C_COMPILER="$(TARGET_CC)" \
       -DCMAKE_CXX_COMPILER="$(TARGET_CXX)" \
       -DCMAKE_FIND_ROOT_PATH="$(STAGING_DIR)" \
@@ -50,8 +46,6 @@ define SSCMA_NODE_CONFIGURE_CMDS
       -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY \
       -DCROSS_COMPILE="$(TARGET_CROSS)" \
       -DSG200X_SDK_PATH="$(RECAMERA_SDK_DIR)" \
-      -DOPENSSL_ROOT_DIR="$(STAGING_DIR)/usr" \
-      -DOPENSSL_USE_STATIC_LIBS=OFF \
       -DSYSROOT="$(STAGING_DIR)" \
       -DCMAKE_INSTALL_PREFIX="$(TARGET_DIR)" \
       ..

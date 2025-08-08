@@ -1,5 +1,4 @@
 diff --git a/components/sophgo/video/CMakeLists.txt b/components/sophgo/video/CMakeLists.txt
-index 7905d6e..1c3f12f 100644
 --- a/components/sophgo/video/CMakeLists.txt
 +++ b/components/sophgo/video/CMakeLists.txt
 @@ -8,6 +8,6 @@ file(GLOB VIDEO_SRC
@@ -10,15 +9,3 @@ index 7905d6e..1c3f12f 100644
 +set(VIDEO_RREQIRDS ae af atomic awb cvi_bin cvi_bin_isp isp isp_algo sys venc vpss gdc vi vo
      cvi_ispd2 json-c sns_ov5647 sns_sc530ai_2l
  )
-diff --git a/components/sscma-micro/CMakeLists.txt b/components/sscma-micro/CMakeLists.txt
-index f58ab09..a5a8b2a 100644
---- a/components/sscma-micro/CMakeLists.txt
-+++ b/components/sscma-micro/CMakeLists.txt
-@@ -39,5 +39,5 @@ component_register(
-     COMPONENT_NAME sscma-micro
-     SRCS ${SOURCES}
-     INCLUDE_DIRS ${INCS}
--    PRIVATE_REQUIREDS  mosquitto ssl crypto cviruntime sophgo cares hv cvi_rtsp
-+    PRIVATE_REQUIREDS  mosquitto ssl crypto sophgo cares hv cvi_rtsp ${SG200X_SDK_PATH}/install/soc_sg2002_recamera_emmc/tpu_musl_riscv64/cvitek_tpu_sdk/lib/libcviruntime-static.a
- ) 
-\ No newline at end of file
