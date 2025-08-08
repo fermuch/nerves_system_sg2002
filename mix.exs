@@ -54,7 +54,7 @@ defmodule NervesSystemSG2002.MixProject do
         {"TARGET_ARCH", "riscv64"},
         {"TARGET_CPU", "baseline_rv64"},
         {"TARGET_OS", "linux"},
-        {"TARGET_ABI", "gnu"},
+        {"TARGET_ABI", "musl"},
       ],
       checksum: package_files()
     ]
@@ -64,7 +64,7 @@ defmodule NervesSystemSG2002.MixProject do
     [
       {:nerves, "~> 1.11.3", runtime: false},
       {:nerves_system_br, "~> 1.32", runtime: false},
-      {:nerves_toolchain_riscv64_nerves_linux_gnu, "~> 13.2.0", runtime: false},
+      {:nerves_toolchain_riscv64_nerves_linux_musl, "~> 13.2.0", runtime: false},
       {:nerves_system_linter, "~> 0.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :docs, runtime: false}
     ]
