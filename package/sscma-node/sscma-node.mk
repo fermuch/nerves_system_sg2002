@@ -60,8 +60,32 @@ endef
 
 # Install step: copy the built files to the target directory
 define SSCMA_NODE_INSTALL_TARGET_CMDS
-	# Install the executable file
-	$(INSTALL) -D -m 0755 $(@D)/solutions/sscma-node/build/sscma-node $(TARGET_DIR)/usr/local/bin/sscma-node
+	# Install the executable file to /usr/bin (in PATH)
+	$(INSTALL) -D -m 0755 $(@D)/solutions/sscma-node/build/sscma-node $(TARGET_DIR)/usr/bin/sscma-node
+	
+	# Install SDK shared libraries to target filesystem (musl RISC-V only)
+	mkdir -p $(TARGET_DIR)/usr/lib
+	
+	# Install RISC-V musl libraries from the install tree
+	if [ -d "$(RECAMERA_SDK_DIR)/install/soc_sg2002_recamera_emmc/tpu_musl_riscv64" ]; then \
+		find $(RECAMERA_SDK_DIR)/install/soc_sg2002_recamera_emmc/tpu_musl_riscv64 -name "*.so*" -type f -exec cp {} $(TARGET_DIR)/usr/lib/ \; ; \
+	fi
+	
+	# Install RISC-V musl libraries from cvi_mpi modules
+	if [ -d "$(RECAMERA_SDK_DIR)/cvi_mpi/modules" ]; then \
+		find $(RECAMERA_SDK_DIR)/cvi_mpi/modules -path "*/musl_riscv64/*.so*" -type f -exec cp {} $(TARGET_DIR)/usr/lib/ \; ; \
+	fi
+	
+	# Install sensor libraries (check for RISC-V versions)
+	if [ -d "$(RECAMERA_SDK_DIR)/buildroot-2021.05/cvi_mmf_sdk/sensors" ]; then \
+		find $(RECAMERA_SDK_DIR)/buildroot-2021.05/cvi_mmf_sdk/sensors -name "*.so*" -type f -exec file {} \; | grep RISC-V | cut -d: -f1 | xargs -I {} cp {} $(TARGET_DIR)/usr/lib/ ; \
+	fi
+	
+	# Create OpenCV symlinks for version compatibility
+	cd $(TARGET_DIR)/usr/lib && \
+	if [ -f libopencv_core.so.3.2.0 ]; then ln -sf libopencv_core.so.3.2.0 libopencv_core.so.3.2; fi && \
+	if [ -f libopencv_imgcodecs.so.3.2.0 ]; then ln -sf libopencv_imgcodecs.so.3.2.0 libopencv_imgcodecs.so.3.2; fi && \
+	if [ -f libopencv_imgproc.so.3.2.0 ]; then ln -sf libopencv_imgproc.so.3.2.0 libopencv_imgproc.so.3.2; fi
 endef
 
 $(eval $(generic-package))
