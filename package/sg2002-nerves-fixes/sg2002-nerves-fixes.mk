@@ -13,7 +13,7 @@ define SG2002_NERVES_FIXES_INSTALL_TARGET_CMDS
   # toolchain extras
 	mkdir -p $(HOST_DIR)/opt/ext-toolchain/bin/
 	cp -f $(BR2_EXTERNAL)/package/nerves-config/echo-gcc-args $(BINARIES_DIR)/buildroot-gcc-args
-	cp -f $(BR2_EXTERNAL)/package/nerves-config/echo-gcc-args $(HOST_DIR)/opt/ext-toolchain/gcc/riscv64-linux-x86_64/bin/echo-gcc-args
+	cp -f $(BR2_EXTERNAL)/package/nerves-config/echo-gcc-args $(HOST_DIR)/opt/ext-toolchain/gcc/riscv64-linux-musl-x86_64/bin/echo-gcc-args
 endef
 
 $(eval $(generic-package))
