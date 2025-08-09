@@ -75,6 +75,16 @@ define SSCMA_NODE_INSTALL_TARGET_CMDS
 	if [ -d "$(RECAMERA_SDK_DIR)/cvi_mpi/modules" ]; then \
 		find $(RECAMERA_SDK_DIR)/cvi_mpi/modules -path "*/musl_riscv64/*.so*" -type f -exec cp {} $(TARGET_DIR)/usr/lib/ \; ; \
 	fi
+
+	# Install core SDK libs from cvi_mpi/lib (filter to RISC-V)
+	if [ -d "$(RECAMERA_SDK_DIR)/cvi_mpi/lib" ]; then \
+		find $(RECAMERA_SDK_DIR)/cvi_mpi/lib -maxdepth 1 -name "*.so*" -type f -exec file {} \; | grep RISC-V | cut -d: -f1 | xargs -I {} cp {} $(TARGET_DIR)/usr/lib/ ; \
+	fi
+
+	# Install libs from the SDK install rootfs tree (filter to RISC-V)
+	if [ -d "$(RECAMERA_SDK_DIR)/install/soc_sg2002_recamera_emmc/rootfs/mnt/system/usr/lib" ]; then \
+		find $(RECAMERA_SDK_DIR)/install/soc_sg2002_recamera_emmc/rootfs/mnt/system/usr/lib -maxdepth 1 -name "*.so*" -type f -exec file {} \; | grep RISC-V | cut -d: -f1 | xargs -I {} cp {} $(TARGET_DIR)/usr/lib/ ; \
+	fi
 	
 	# Install sensor libraries (check for RISC-V versions)
 	if [ -d "$(RECAMERA_SDK_DIR)/buildroot-2021.05/cvi_mmf_sdk/sensors" ]; then \
