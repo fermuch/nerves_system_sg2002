@@ -9,6 +9,16 @@ echo /sbin/mdev > /proc/sys/kernel/hotplug
 /sbin/modprobe mac80211 2>/dev/null || true
 /sbin/modprobe brcmfmac 2>/dev/null || true
 
+# Load CVI camera/video kernel modules
+/sbin/modprobe cv181x_sys 2>/dev/null || true
+/sbin/modprobe cv181x_base 2>/dev/null || true
+/sbin/modprobe snsr_i2c 2>/dev/null || true
+/sbin/modprobe cvi_mipi_rx 2>/dev/null || true
+/sbin/modprobe cv181x_vi 2>/dev/null || true
+/sbin/modprobe cv181x_vpss 2>/dev/null || true
+/sbin/modprobe cv181x_cif 2>/dev/null || true
+/sbin/modprobe cvi_vc_driver 2>/dev/null || true
+
 # Check if nerves_serial_number exists, if not create it
 if ! fw_printenv nerves_serial_number > /dev/null 2>&1; then
   ID=$(uuidgen -r | sed 's/-//g')
