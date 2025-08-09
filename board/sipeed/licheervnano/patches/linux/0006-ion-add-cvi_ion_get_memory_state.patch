@@ -1,0 +1,68 @@
+From 653d9b07aedca7d81ce9a3da5da092fcfc224a32 Mon Sep 17 00:00:00 2001
+From: Nerves Bot <bot@example.com>
+Date: Sat, 9 Aug 2025 11:12:46 -0300
+Subject: [PATCH] ion: add cvi_ion_get_memory_state helper for Cvitek drivers
+
+---
+ .../android/ion/cvitek/cvitek_ion_alloc.h     |  1 +
+ drivers/staging/android/ion/ion.c             | 37 +++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/drivers/staging/android/ion/cvitek/cvitek_ion_alloc.h b/drivers/staging/android/ion/cvitek/cvitek_ion_alloc.h
+index bcc60cc..a3ed9cf 100644
+--- a/drivers/staging/android/ion/cvitek/cvitek_ion_alloc.h
++++ b/drivers/staging/android/ion/cvitek/cvitek_ion_alloc.h
+@@ -21,4 +21,5 @@ void cvi_ion_free_nofd(struct ion_buffer *buffer);
+ 
+ void cvi_ion_dump(struct ion_heap *heap);
+ 
++int cvi_ion_get_memory_state(unsigned long long *total_size, unsigned long long *free_size, unsigned long long *max_avail_size);
+ #endif /* __CVITEK_ION_ALLOC_H__ */
+diff --git a/drivers/staging/android/ion/ion.c b/drivers/staging/android/ion/ion.c
+index 035704b..425640c 100644
+--- a/drivers/staging/android/ion/ion.c
++++ b/drivers/staging/android/ion/ion.c
+@@ -910,3 +910,40 @@ void ion_free(pid_t pid, int fd)
+ }
+ EXPORT_SYMBOL(ion_free);
+ #endif
++#ifdef CONFIG_ION_CVITEK
++int cvi_ion_get_memory_state(u64 *total_size, u64 *free_size, u64 *max_avail_size)
++{
++    struct ion_device *dev = internal_dev;
++    struct ion_heap *heap;
++    u64 total = 0;
++    u64 free = 0;
++    u64 max_free = 0;
++
++    if (!total_size || !free_size || !max_avail_size)
++        return -EINVAL;
++
++    down_read(&dev->lock);
++    plist_for_each_entry(heap, &dev->heaps, node) {
++        u64 heap_total = heap->total_size;
++        u64 heap_used;
++        u64 heap_free;
++
++        spin_lock(&heap->stat_lock);
++        heap_used = heap->num_of_alloc_bytes;
++        spin_unlock(&heap->stat_lock);
++
++        heap_free = (heap_total > heap_used) ? (heap_total - heap_used) : 0;
++        total += heap_total;
++        free += heap_free;
++        if (heap_free > max_free)
++            max_free = heap_free;
++    }
++    up_read(&dev->lock);
++
++    *total_size = total;
++    *free_size = free;
++    *max_avail_size = max_free;
++    return 0;
++}
++EXPORT_SYMBOL_GPL(cvi_ion_get_memory_state);
++#endif
+-- 
+2.50.1
+
