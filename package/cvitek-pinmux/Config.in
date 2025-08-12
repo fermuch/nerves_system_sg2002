@@ -1,5 +1,6 @@
 
-config TARGET_PACKAGE_CVITEK_PINMUX
-        bool "PinMux"
-        help
-          cvitek PinMux utility
+config BR2_PACKAGE_CVITEK_PINMUX
+  bool "PinMux"
+  default y
+  help
+    cvitek PinMux utility
