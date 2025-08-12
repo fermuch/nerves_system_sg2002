@@ -1,6 +1,4 @@
 defmodule Example.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -20,6 +18,8 @@ defmodule Example.Application do
     Supervisor.start_link(children, opts)
   end
 
+  def show_children(), do: target_children()
+
   # List all child processes to be supervised
   if Mix.target() == :host do
     defp target_children() do
@@ -34,7 +34,15 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
-        {Example.LEDToggle, name: Example.LEDToggle},
+        {Example.MqttManager, []},
+        Supervisor.child_spec({MuonTrap.Daemon, ["mosquitto", ["-c", "/etc/mosquitto/mosquitto.conf"]]}, id: :mosquitto_daemon),
+        Supervisor.child_spec({MuonTrap.Daemon, ["sscma-node", ["--start"]]}, id: :sscma_node_daemon),
+        Tortoise.Connection.child_spec(
+          client_id: "example",
+          handler: {Example.MqttHandler, [client_id: "example"]},
+          server: {Tortoise.Transport.Tcp, host: ~c"localhost", port: 1883},
+          subscriptions: [{"sscma/v0/recamera/node/out/#", 0}]
+        )
       ]
     end
   end

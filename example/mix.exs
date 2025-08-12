@@ -48,7 +48,12 @@ defmodule Example.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_sg2002, path: "../", runtime: false, targets: :nerves_system_sg2002, nerves: [compile: true]}
+      {:nerves_system_sg2002, path: "../", runtime: false, targets: :nerves_system_sg2002, nerves: [compile: true]},
+
+
+      # part of the example
+      {:muontrap, "~> 1.6"},
+      {:tortoise, "~> 0.10"}
     ]
   end
 

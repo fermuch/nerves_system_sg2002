@@ -1,18 +1,10 @@
 defmodule Example do
   @moduledoc """
-  Documentation for `Example`.
+  Example application for the reCamera image.
+
+  Includes:
+
+  - Mosquitto: MQTT broker (used internally)
+  - SSCMA-Node: camera/TPU integration
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Example.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
