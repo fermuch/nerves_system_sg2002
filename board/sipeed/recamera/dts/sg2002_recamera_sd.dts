@@ -1,167 +1,118 @@
 /dts-v1/;
 #include "cv181x_base_riscv.dtsi"
+/*#include "cv181x_asic_qfn.dtsi"*/
+/*#include "cv181x_asic_sd.dtsi"*/
 #include "cv181x_default_memmap.dtsi"
-#include <dt-bindings/gpio/gpio.h>
 
 &sd {
-    status = "okay";
-    no-1-8-v;
+	no-1-8-v;
 };
 
 &mipi_rx{
-    /delete-property/ snsr-reset;
+	/delete-property/ snsr-reset;
 };
 
 &mipi_tx {
-    /delete-property/ reset-gpio;
-    /delete-property/ pwm-gpio;
-    /delete-property/ power-ct-gpio;
+	/delete-property/ reset-gpio;
+	/delete-property/ pwm-gpio;
+	/delete-property/ power-ct-gpio;
 };
 
 &dac{
-    status = "okay";
+	/delete-property/ mute-gpio-r;
 };
 
 &spi0 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &spi1 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &spi2 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &spi3 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &i2c0 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &i2c1 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &i2c2 {
 	status = "okay";
-	clocks = <&clk CV181X_CLK_I2C>, <&clk CV181X_CLK_APB_I2C2>;
-	clock-names = "ref", "pclk";
-	resets = <&rst RST_I2C2>;
-	reset-names = "i2c";
-	clock-frequency = <100000>;
-
-	// Enable GPIO recovery like the working system
-	scl-gpios = <&portc 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-	sda-gpios = <&portc 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-
-	// Keep the pinmux registers
-	scl-pinmux = <0x030011a0>;
-	sda-pinmux = <0x0300119c>;
 };
 
 &i2c3 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &i2c4 {
-    status = "disabled";
+	status = "disabled";
 };
 
 &uart1 {
-    status = "okay";
+	status = "okay";
 };
 
 &uart2 {
-    status = "okay";
+	status = "okay";
 };
 
 &uart3 {
-    status = "okay";
+	status = "okay";
 };
 
 &uart4 {
-    status = "okay";
+	status = "okay";
 };
 
 &wifisd {
-    status = "okay";
+	status = "okay";
 };
 
 / {
-    model = "Seeed reCamera";
+	model = "Seeed reCamera";
 
-    /delete-node/ cvi-spif@10000000;
-    /delete-node/ cv-spinf@4060000;
-    /delete-node/ cv-wd@0x3010000;
+	/delete-node/ cvi-spif@10000000;
+	/delete-node/ cv-spinf@4060000;
 
-    leds {
-        compatible = "gpio-leds";
+	leds {
+		compatible = "gpio-leds";
 
-        led0 {
-            label = "red";
-            gpios = <&porta 15 1>;
-            linux,default-trigger = "heartbeat";
-            default-state = "on";
-        };
+		led0 {
+			label = "red";
+			gpios = <&porta 15 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+			default-state = "on";
+		};
 
-        led1 {
-            label = "blue";
-            gpios = <&porte 24 1>;
-            linux,default-trigger = "mmc0";
-            default-state = "on";
-        };
+		led1 {
+			label = "blue";
+			gpios = <&porte 24 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "mmc0";
+			default-state = "on";
+		};
 
-        led2 {
-            label = "white";
-            gpios = <&porte 0 0>;
-            default-state = "off";
-        };
-    };
+		led2 {
+			label = "white";
+			gpios = <&porte 0 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
 
-    /delete-node/ bt_pin;
-    /delete-node/ wifi_pin;
-    wifi_pin {
-        compatible = "cvitek,wifi-pin";
-        poweron-gpio = <&porta 30 1>;
-    };
-
-    soc {
-        watchdog0: cv-wd@0x3010000 {
-            compatible = "snps,dw-wdt";
-            reg = <0x0 0x03010000 0x0 0x1000>;
-            resets = <&rst RST_WDT>;
-            interrupts = <58 IRQ_TYPE_LEVEL_HIGH>;
-            clocks = <&pclk>;
-        };
-    };
-
-    // Camera (MIPI CSI)
-    mipi_rx: cif {
-        compatible = "cvitek,cif";
-        reg = <0x0 0x0a0c2000 0x0 0x2000>, <0x0 0x0a0d0000 0x0 0x1000>,
-              <0x0 0x0a0c4000 0x0 0x2000>, <0x0 0x0a0c6000 0x0 0x2000>,
-              <0x0 0x03001c30 0x0 0x30>;
-        reg-names = "csi_mac0", "csi_wrap0", "csi_mac1", "csi_mac2", "pad_ctrl";
-        snsr-reset = <&porta 2 GPIO_ACTIVE_LOW>, <&porta 2 GPIO_ACTIVE_LOW>, <&porta 2 GPIO_ACTIVE_LOW>;
-        resets = <&rst RST_CSIPHY0>, <&rst RST_CSIPHY1>,
-            <&rst RST_CSIPHY0RST_APB>, <&rst RST_CSIPHY1RST_APB>;
-        reset-names = "phy0", "phy1", "phy-apb0", "phy-apb1";
-        clocks = <&clk CV181X_CLK_CAM0>, <&clk CV181X_CLK_CAM1>, <&clk CV181X_CLK_SRC_VIP_SYS_2>,
-             <&clk CV181X_CLK_MIPIMPLL>, <&clk CV181X_CLK_DISPPLL>, <&clk CV181X_CLK_FPLL>;
-        clock-names = "clk_cam0", "clk_cam1", "clk_sys_2",
-                  "clk_mipimpll", "clk_disppll", "clk_fpll";
-    };
-
-    mipi_tx: mipi_tx {
-        compatible = "cvitek,mipi_tx";
-        reset-gpio = <&porte 2 GPIO_ACTIVE_LOW>;
-        pwm-gpio = <&porte 0 GPIO_ACTIVE_HIGH>;
-        power-ct-gpio = <&porte 1 GPIO_ACTIVE_HIGH>;
-        clocks = <&clk CV181X_CLK_DISP_VIP>, <&clk CV181X_CLK_DSI_MAC_VIP>;
-        clock-names = "clk_disp", "clk_dsi";
-    };
+	/delete-node/ bt_pin;
+	/delete-node/ wifi_pin;
+	wifi_pin {
+		compatible = "cvitek,wifi-pin";
+		poweron-gpio = <&porta 30 GPIO_ACTIVE_HIGH>;
+		/*wakeup-gpio = <&porte 8 GPIO_ACTIVE_HIGH>;*/
+	};
 };
