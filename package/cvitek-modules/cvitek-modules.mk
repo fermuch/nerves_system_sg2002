@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CVITEK_MODULES_VERSION = f35ca075cc022aac97f5d22238c1e46caf8276bd
+CVITEK_MODULES_VERSION = 3639eb4
 CVITEK_MODULES_SITE = $(call github,sophgo,osdrv,$(CVITEK_MODULES_VERSION))
 CVITEK_MODULES_LICENSE = GPL-2.0(kernel driver), Apache 2.0(userspace)
 CVITEK_MODULES_INSTALL_STAGING = YES
@@ -17,30 +17,30 @@ CVITEK_MODULES_MODULE_MAKE_OPTS = \
                  -I$(BUILD_DIR)/cvitek-modules-$(CVITEK_MODULES_VERSION)/interdrv/include/common/uapi\ \
                  -I$(BUILD_DIR)/cvitek-modules-$(CVITEK_MODULES_VERSION)/interdrv/include/chip/cv181x/uapi
 
-CVITEK_MODULES_MODULE_SUBDIRS = interdrv/sys 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/base 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/vcodec 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/jpeg 
+CVITEK_MODULES_MODULE_SUBDIRS = interdrv/v2/sys 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/base 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/vcodec 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/jpeg 
 # CVITEK_MODULES_MODULE_SUBDIRS += interdrv/pwm 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/rtc 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/wdt 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/tpu 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/mon 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/clock_cooling 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/saradc 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/wiegand 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/vi 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/snsr_i2c 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/cif
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/vpss 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/dwa 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/rgn 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/vo 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/rtos_cmdqu 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/fast_image 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/cvi_vc_drv 
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/ive
-CVITEK_MODULES_MODULE_SUBDIRS += interdrv/fb
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/rtc 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/wdt 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/tpu 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/mon 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/clock_cooling 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/saradc 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/wiegand 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/vi 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/snsr_i2c 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/cif
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/vpss 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/dwa 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/rgn 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/vo 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/rtos_cmdqu 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/fast_image 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/cvi_vc_drv 
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/ive
+CVITEK_MODULES_MODULE_SUBDIRS += interdrv/v2/fb
 # CVITEK_MODULES_MODULE_SUBDIRS += extdrv/tp/ts_gsl
 # CVITEK_MODULES_MODULE_SUBDIRS += extdrv/tp/ts_gt9xx
 # CVITEK_MODULES_MODULE_SUBDIRS += extdrv/wiegand-gpio
@@ -64,8 +64,8 @@ CVITEK_MODULES_MODULE_SUBDIRS += extdrv/tp/ts_gt9xx
 # CVITEK_MODULES_MODULE_SUBDIRS += extdrv/wireless/broadcom/bcmdhd
 
 define CVITEK_MODULES_INSTALL_STAGING_CMDS
-    $(INSTALL) -D -m 0644 $(@D)/interdrv/include/common/uapi/linux/* $(LINUX_DIR)/usr/include/linux/
-    $(INSTALL) -D -m 0644 $(@D)/interdrv/include/chip/cv181x/uapi/linux/* $(LINUX_DIR)/usr/include/linux/
+    $(INSTALL) -D -m 0644 $(@D)/interdrv/v2/include/common/uapi/linux/* $(LINUX_DIR)/usr/include/linux/
+    $(INSTALL) -D -m 0644 $(@D)/interdrv/v2/include/chip/cv181x/uapi/linux/* $(LINUX_DIR)/usr/include/linux/
     $(info Staging Directory = $(STAGING_DIR))
 endef
 
