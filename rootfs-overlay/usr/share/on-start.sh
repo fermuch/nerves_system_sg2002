@@ -28,14 +28,31 @@ modprobe cv181x_jpeg
 modprobe cvi_vc_driver MaxVencChnNum=9 MaxVdecChnNum=9
 modprobe cv181x_ive
 
-# # Try to load Wi-Fi stack
+# Try to load Wi-Fi stack
 modprobe cfg80211
 modprobe mac80211
 modprobe brcmfmac
 
-# Check if nerves_serial_number exists, if not create it
-if ! fw_printenv nerves_serial_number > /dev/null 2>&1; then
-  ID=$(uuidgen -r | sed 's/-//g')
+# Set up USB networking
+/usr/share/uhubon.sh device >> /tmp/ncm.log 2>&1
+/usr/share/run_usb.sh probe ncm >> /tmp/ncm.log 2>&1
+/usr/share/run_usb.sh start ncm >> /tmp/ncm.log 2>&1
+
+# Wait until wlan0 is up, up to 60 seconds
+for i in {1..60}; do
+  if ifconfig wlan0 > /dev/null 2>&1; then
+    break
+  fi
+  sleep 1
+done
+
+# If wlan0 is not up after 60 seconds, print an error message
+if ! ifconfig wlan0 > /dev/null 2>&1; then
+  echo "wlan0 is not up after 60 seconds"
+else
+  echo "wlan0 is up"
+  # Set nerves' serial number to the MAC address of wlan0
+  ID=$(ifconfig wlan0 | grep 'HWaddr' | awk '{print $5}')
   fw_setenv nerves_serial_number "$ID"
   echo "Setting nerves_serial_number to: $ID"
 fi

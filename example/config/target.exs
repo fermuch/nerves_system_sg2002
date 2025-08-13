@@ -48,7 +48,16 @@ config :nerves_ssh,
 config :vintage_net,
   regulatory_domain: "00",
   config: [
-    {"usb0", %{type: VintageNetDirect}},
+    {"usb0", %{
+      type: VintageNetEthernet,
+      ipv4: %{
+        method: :static,
+        address: "192.168.42.1",
+        prefix_length: 24,
+        gateway: "192.168.42.1",
+        name_servers: ["1.1.1.1"]
+      }
+    }},
     {"eth0",
      %{
        type: VintageNetEthernet,
