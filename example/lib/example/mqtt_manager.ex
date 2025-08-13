@@ -13,23 +13,85 @@ defmodule Example.MqttManager do
   @cam_create_payload ~S({"type":3,"name":"create","data":{"type":"camera","config":{}}})
   @stream_create_payload ~S({"type":3,"name":"create","data":{"type":"stream","config":{},"dependencies":["cam1"]}})
 
+  @check_nodes_interval 5000
+
+  defmodule State do
+    defstruct [
+      :check_nodes_timer,
+      :cam_created,
+      :stream_created,
+    ]
+  end
 
   def start_link(_args) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
+  @impl GenServer
   def init(_args) do
-    {:ok, nil}
+    {:ok, %State{
+      check_nodes_timer: nil,
+      cam_created: false,
+      stream_created: false,
+    }}
   end
 
   def on_connection_up() do
-    Process.send_after(__MODULE__, :on_connection_up, 5000)
+    Process.send_after(__MODULE__, :on_connection_up, 1000)
   end
 
+  def set_cam_created(value) when is_boolean(value) do
+    GenServer.call(__MODULE__, {:set_cam_created, value})
+  end
+
+  def set_stream_created(value) when is_boolean(value) do
+    GenServer.call(__MODULE__, {:set_stream_created, value})
+  end
+
+  @impl GenServer
   def handle_info(:on_connection_up, state) do
     Logger.info("MQTT connection is up; creating camera and stream")
-    _ = Tortoise.publish("example", @cam_create_topic, @cam_create_payload, qos: 1)
-    _ = Tortoise.publish("example", @stream_create_topic, @stream_create_payload, qos: 1)
+    {:ok, _ref} = Tortoise.publish("example", @cam_create_topic, @cam_create_payload, qos: 1)
+    {:ok, _ref} = Tortoise.publish("example", @stream_create_topic, @stream_create_payload, qos: 1)
+
+    if state.check_nodes_timer != nil do
+      Process.cancel_timer(state.check_nodes_timer)
+    end
+    new_state = %{state | check_nodes_timer: Process.send_after(__MODULE__, :check_nodes, @check_nodes_interval)}
+
+    {:noreply, new_state}
+  end
+
+  @impl GenServer
+  def handle_info(:check_nodes, state) do
+    Logger.info("Checking nodes")
+
+    if not state.cam_created do
+      Logger.info("Camera not created; creating again")
+      {:ok, _ref} = Tortoise.publish("example", @cam_create_topic, @cam_create_payload, qos: 1)
+    end
+
+    if not state.stream_created do
+      Logger.info("Stream not created; creating again")
+      {:ok, _ref} = Tortoise.publish("example", @stream_create_topic, @stream_create_payload, qos: 1)
+    end
+
+    new_state = %{state | check_nodes_timer: Process.send_after(__MODULE__, :check_nodes, @check_nodes_interval)}
+    {:noreply, new_state}
+  end
+
+  @impl GenServer
+  def handle_info(_other, state) do
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_call({:set_cam_created, cam_created}, _from, state) do
+    {:reply, :ok, %{state | cam_created: cam_created}}
+  end
+
+  @impl GenServer
+  def handle_call({:set_stream_created, stream_created}, _from, state) do
+    {:reply, :ok, %{state | stream_created: stream_created}}
   end
 end
