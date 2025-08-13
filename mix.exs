@@ -99,9 +99,16 @@ defmodule NervesSystemSG2002.MixProject do
 
   defp package_files do
     [
+      "board",
+      "boot",
+      "package",
+      "patches",
+      "generated",
       "fwup_include",
       "rootfs-overlay",
       "uboot",
+      "external.mk",
+      "Config.in",
       "CHANGELOG.md",
       "fwup-ops.conf",
       "fwup.conf",
@@ -109,6 +116,7 @@ defmodule NervesSystemSG2002.MixProject do
       "nerves_defconfig",
       "post-build.sh",
       "post-createfs.sh",
+      "README.md",
       "VERSION"
     ]
   end
