@@ -10,8 +10,16 @@ defmodule Example.MqttManager do
   @cam_create_topic "sscma/v0/recamera/node/in/cam1"
   @stream_create_topic "sscma/v0/recamera/node/in/stream1"
 
-  @cam_create_payload ~S({"type":3,"name":"create","data":{"type":"camera","config":{}}})
-  @stream_create_payload ~S({"type":3,"name":"create","data":{"type":"stream","config":{},"dependencies":["cam1"]}})
+  @cam_create_payload JSON.encode!(%{type: 3, name: "create", data: %{type: "camera", config: %{
+    option: "480p",
+    preview: true,
+    audio: false,
+  }}})
+  @stream_create_payload JSON.encode!(%{type: 3, name: "create", data: %{type: "stream", config: %{
+    user: "example",
+    password: "admin",
+    port: 554
+  }, dependencies: ["cam1"]}})
 
   @check_nodes_interval 5000
 
