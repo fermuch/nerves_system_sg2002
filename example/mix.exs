@@ -9,7 +9,7 @@ defmodule Example.MixProject do
     [
       app: @app,
       version: @version,
-      elixir: "~> 1.19.0-rc.0",
+      elixir: "~> 1.18.4",
       archives: [nerves_bootstrap: "~> 1.13"],
       start_permanent: Mix.env() == :prod,
       deps: deps(),
