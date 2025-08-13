@@ -90,9 +90,7 @@ defmodule NervesSystemSG2002.MixProject do
       files: package_files(),
       licenses: ["GPL-2.0-only", "GPL-2.0-or-later"],
       links: %{
-        "GitHub" => @source_url,
-        "REUSE Compliance" =>
-          "https://api.reuse.software/info/github.com/nerves-project/nerves_system_mangopi_mq_pro"
+        "GitHub" => @source_url
       }
     ]
   end
