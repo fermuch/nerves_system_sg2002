@@ -28,3 +28,13 @@ Non-working / Untested:
 
 * TPU driver
 * Camera
+
+## v0.17.0
+
+Finally, a working camera!
+
+Additionally, we have networking over USB.
+
+Still missing / untested:
+
+* Loading models to the TPU.
