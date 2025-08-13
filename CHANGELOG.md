@@ -38,3 +38,7 @@ Additionally, we have networking over USB.
 Still missing / untested:
 
 * Loading models to the TPU.
+
+## v0.17.1
+
+Updated CI and using docker builder.
