@@ -29,6 +29,21 @@ defmodule Example.MqttHandler do
     cam_message(payload, state)
   end
 
+  def handle_message(["sscma", "v0", "recamera", "node", "out", "model1"], payload, state) do
+    payload = JSON.decode!(payload)
+
+    case payload["code"] do
+      0 ->
+        Logger.info("Model enabled acknowledgment received")
+        Example.MqttManager.set_model_created(payload["data"])
+      11 ->
+        Logger.info("Model already exists; skipping")
+        Example.MqttManager.set_model_created(true)
+    end
+
+    {:ok, state}
+  end
+
   def handle_message(["sscma", "v0", "recamera", "node", "out", "stream1"], payload, state) do
     payload = JSON.decode!(payload)
 
@@ -51,21 +66,21 @@ defmodule Example.MqttHandler do
     {:ok, state}
   end
 
-  def cam_message(%{"code" => code} = payload, state) when code in [0, 11] and not is_map_key(payload, "data") do
-    case code do
-      0 ->
-        Logger.info("Camera enabled acknowledgment received")
-        Example.MqttManager.set_cam_created(payload["data"])
-      11 ->
-        Logger.info("Camera already exists; skipping")
-        Example.MqttManager.set_cam_created(true)
-    end
+  def cam_message(%{"code" => 11, "data" => "Node already exists: cam1"}, state) do
+    Logger.info("Camera already exists; skipping")
+    Example.MqttManager.set_cam_created(true)
+    {:ok, state}
+  end
+
+  def cam_message(%{"code" => 0} = payload, state) when is_map_key(payload, "data") and is_boolean(:erlang.map_get("data", payload)) do
+    Logger.info("Camera enabled acknowledgment received")
+    Example.MqttManager.set_cam_created(payload["data"])
 
     {:ok, state}
   end
 
   def cam_message(%{"code" => 0, "data" => data}, state) do
-    Logger.info("Camera preview frame received: #{inspect(data)}")
+    Logger.info("Camera preview frame received: #{inspect(Map.keys(data))}")
     {:ok, state}
   end
 

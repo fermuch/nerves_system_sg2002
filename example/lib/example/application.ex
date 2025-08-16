@@ -34,15 +34,15 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
-        {Example.MqttManager, []},
-        Supervisor.child_spec({MuonTrap.Daemon, ["mosquitto", ["-c", "/etc/mosquitto/mosquitto.conf"]]}, id: :mosquitto_daemon),
-        Supervisor.child_spec({MuonTrap.Daemon, ["sscma-node", ["--start"]]}, id: :sscma_node_daemon),
-        Tortoise.Connection.child_spec(
-          client_id: "example",
-          handler: {Example.MqttHandler, [client_id: "example"]},
-          server: {Tortoise.Transport.Tcp, host: ~c"localhost", port: 1883},
-          subscriptions: [{"sscma/v0/recamera/node/out/#", 0}]
-        )
+        # {Example.MqttManager, []},
+        # Supervisor.child_spec({MuonTrap.Daemon, ["mosquitto", ["-c", "/etc/mosquitto/mosquitto.conf"]]}, id: :mosquitto_daemon),
+        # Supervisor.child_spec({MuonTrap.Daemon, ["sscma-node", ["--start"]]}, id: :sscma_node_daemon),
+        # Tortoise.Connection.child_spec(
+        #   client_id: "example",
+        #   handler: {Example.MqttHandler, [client_id: "example"]},
+        #   server: {Tortoise.Transport.Tcp, host: ~c"localhost", port: 1883},
+        #   subscriptions: [{"sscma/v0/recamera/node/out/#", 0}]
+        # )
       ]
     end
   end

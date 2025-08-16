@@ -1,0 +1,15 @@
+config BR2_PACKAGE_SSCMA_SIMPLE
+    bool "sscma-simple"
+    default y
+    select BR2_PACKAGE_LIBHV
+    select BR2_PACKAGE_ALSA_LIB
+    select BR2_PACKAGE_ALSA_LIB_PCM
+    select BR2_PACKAGE_RECAMERA_SDK
+    select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+    select BR2_PACKAGE_MOSQUITTO
+    help
+      Minimal C++ application template using reCamera SDK and ALSA. Builds a
+      single binary `sscma-simple`.
+      Source lives in `package/sscma-simple/src/main.cpp`.
+
+
