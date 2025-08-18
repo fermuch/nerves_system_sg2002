@@ -94,7 +94,9 @@ config :mdns_lite,
 
 # import_config "#{Mix.target()}.exs"
 
-import_config "secrets.exs"
+if File.exists?("secrets.exs") do
+  import_config "secrets.exs"
+end
 
 config :logger, :default_handler, false
 

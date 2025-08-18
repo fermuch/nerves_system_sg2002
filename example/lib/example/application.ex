@@ -34,6 +34,17 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
+        Supervisor.child_spec(
+          {
+            MuonTrap.Daemon,
+            [
+              "sscma-elixir",
+              ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "250"],
+              [log_output: :info]
+            ],
+          },
+          id: :sscma_node_daemon
+        ),
         # {Example.MqttManager, []},
         # Supervisor.child_spec({MuonTrap.Daemon, ["mosquitto", ["-c", "/etc/mosquitto/mosquitto.conf"]]}, id: :mosquitto_daemon),
         # Supervisor.child_spec({MuonTrap.Daemon, ["sscma-node", ["--start"]]}, id: :sscma_node_daemon),
