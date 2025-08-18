@@ -20,6 +20,7 @@ let
     export ERL_AFLAGS="-kernel shell_history enabled"
 
     mix local.hex --force
+    mix archive.install hex nerves_bootstrap --force
     '';
 
   in mkShell {
