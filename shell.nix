@@ -26,6 +26,7 @@ let
 
     mix local.hex --force
     mix archive.install hex nerves_bootstrap --force
+    mix archive.install hex phx_new --force
 
     export MIX_TARGET=nerves_system_sg2002
     '';
