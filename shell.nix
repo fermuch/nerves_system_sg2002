@@ -5,6 +5,11 @@ let
     otp.elixir_1_18
     otp.erlang
     otp.elixir-ls
+
+    # build deps for nerves
+    pkg-config
+    fwup
+    squashfsTools
   ];
   PROJECT_ROOT = builtins.toString ./.;
 
