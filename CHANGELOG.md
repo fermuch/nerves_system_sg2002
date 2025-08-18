@@ -42,3 +42,11 @@ Still missing / untested:
 ## v0.17.1
 
 Updated CI and using docker builder.
+
+## v0.18.0
+
+Added `sscma-elixir` program.
+
+## v0.18.1
+
+Correctly publishing `sscma-elixir` program in the image and added NixOS support.
