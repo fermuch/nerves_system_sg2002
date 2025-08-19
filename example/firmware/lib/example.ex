@@ -4,7 +4,6 @@ defmodule Example do
 
   Includes:
 
-  - Mosquitto: MQTT broker (used internally)
-  - SSCMA-Node: camera/TPU integration
+  - SSCMA-Elixir: camera/TPU integration
   """
 end

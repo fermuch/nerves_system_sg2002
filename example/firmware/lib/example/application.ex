@@ -39,21 +39,12 @@ defmodule Example.Application do
             MuonTrap.Daemon,
             [
               "sscma-elixir",
-              ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "250"],
-              [log_output: :info]
+              ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300"],
+              [logger_fun: {Example.AiDispatcher, :dispatch, []}]
             ],
           },
-          id: :sscma_node_daemon
+          id: :sscma_elixir_daemon
         ),
-        # {Example.MqttManager, []},
-        # Supervisor.child_spec({MuonTrap.Daemon, ["mosquitto", ["-c", "/etc/mosquitto/mosquitto.conf"]]}, id: :mosquitto_daemon),
-        # Supervisor.child_spec({MuonTrap.Daemon, ["sscma-node", ["--start"]]}, id: :sscma_node_daemon),
-        # Tortoise.Connection.child_spec(
-        #   client_id: "example",
-        #   handler: {Example.MqttHandler, [client_id: "example"]},
-        #   server: {Tortoise.Transport.Tcp, host: ~c"localhost", port: 1883},
-        #   subscriptions: [{"sscma/v0/recamera/node/out/#", 0}]
-        # )
       ]
     end
   end
