@@ -1,12 +1,4 @@
 import Config
-config :ash, policies: [show_policy_breakdowns?: true]
-
-# Configure your database
-config :ui, Ui.Repo,
-  database: Path.expand("../ui_dev.db", __DIR__),
-  pool_size: 5,
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -21,10 +13,9 @@ config :ui, UiWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "WEezdD4mBk28LEfss1JA4sCCokeZPkmxigTqk24yLcPzHN6iDzIdEy6LOYu1rlj/",
+  secret_key_base: "9rD7cvEOyxElo2IOlJxUtbRH3yANVPFcYd90FiyQDz9nv2bpnQXGoqEZZ06JMn/9",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:ui, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:ui, ~w(--watch)]}
+    esbuild: {Esbuild, :install_and_run, [:ui, ~w(--sourcemap=inline --watch)]}
   ]
 
 # ## SSL Support
@@ -81,6 +72,3 @@ config :phoenix_live_view,
   debug_attributes: true,
   # Enable helpful, but potentially expensive runtime checks
   enable_expensive_runtime_checks: true
-
-# Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false

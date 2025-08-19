@@ -1,5 +1,23 @@
 import Config
 
+# For phoenix (UI)
+config :ui, UiWeb.Endpoint,
+  url: [host: "nerves.local"],
+  http: [port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: "HEY05EB1dFVSu6KykKHuS4rQPQzSHv4F7mGVB/gnDLrIu75wE/ytBXy2TaL3A6RA",
+  live_view: [signing_salt: "AAAABjEyERMkxgDh"],
+  check_origin: false,
+  # Start the server since we're running in a release instead of through `mix`
+  server: true,
+  render_errors: [view: UiWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Ui.PubSub,
+  # Nerves root filesystem is read-only, so disable the code reloader
+  code_reloader: false
+
+config :phoenix, :json_library, Jason
+config :esbuild, :version, "0.25.0"
+
 # Use Ringlogger as the logger backend and remove :console.
 # See https://hexdocs.pm/ring_logger/readme.html for more information on
 # configuring ring_logger.
@@ -94,7 +112,7 @@ config :mdns_lite,
 
 # import_config "#{Mix.target()}.exs"
 
-if File.exists?("secrets.exs") do
+if File.exists?("config/secrets.exs") do
   import_config "secrets.exs"
 end
 

@@ -85,7 +85,7 @@ defmodule UiWeb do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components
-      use UiWeb.Components.MishkaComponents
+      import UiWeb.CoreComponents
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS

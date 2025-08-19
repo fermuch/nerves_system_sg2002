@@ -9,8 +9,6 @@ defmodule Ui.Application do
   def start(_type, _args) do
     children = [
       UiWeb.Telemetry,
-      Ui.Repo,
-      {Ecto.Migrator, repos: Application.fetch_env!(:ui, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:ui, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Ui.PubSub},
       # Start a worker by calling: Ui.Worker.start_link(arg)
@@ -31,10 +29,5 @@ defmodule Ui.Application do
   def config_change(changed, _new, removed) do
     UiWeb.Endpoint.config_change(changed, removed)
     :ok
-  end
-
-  defp skip_migrations?() do
-    # By default, sqlite migrations are run when using a release
-    System.get_env("RELEASE_NAME") == nil
   end
 end

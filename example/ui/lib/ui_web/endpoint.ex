@@ -7,7 +7,7 @@ defmodule UiWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_ui_key",
-    signing_salt: "VYS1/x6y",
+    signing_salt: "CuF41vnD",
     same_site: "Lax"
   ]
 
@@ -32,8 +32,6 @@ defmodule UiWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug AshPhoenix.Plug.CheckCodegenStatus
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :ui
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
