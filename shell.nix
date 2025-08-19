@@ -10,6 +10,10 @@ let
     pkg-config
     fwup
     squashfsTools
+
+    # for ash/phoenix
+    inotify-tools
+    watchman
   ];
   PROJECT_ROOT = builtins.toString ./.;
 
