@@ -34,17 +34,17 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
-        Supervisor.child_spec(
-          {
-            MuonTrap.Daemon,
-            [
-              "sscma-elixir",
-              ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300"],
-              [logger_fun: {Example.AiDispatcher, :dispatch, []}]
-            ],
-          },
-          id: :sscma_elixir_daemon
-        ),
+        # Supervisor.child_spec(
+        #   {
+        #     MuonTrap.Daemon,
+        #     [
+        #       "sscma-elixir",
+        #       ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300"],
+        #       [logger_fun: {Example.AiDispatcher, :dispatch, []}]
+        #     ],
+        #   },
+        #   id: :sscma_elixir_daemon
+        # ),
       ]
     end
   end

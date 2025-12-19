@@ -1,0 +1,33 @@
+From: Assistant <assistant@example.com>
+Date: Fri, 19 Dec 2025 12:00:00 +0000
+Subject: [PATCH] Add UAPI header for vo_mipi_tx
+
+The middleware requires a userspace-compatible vo_mipi_tx.h header,
+but only a kernel-internal version exists in interdrv/vo/chip/. This
+patch creates a proper UAPI header that can be used by userspace
+applications without requiring kernel-internal headers.
+
+Signed-off-by: Assistant <assistant@example.com>
+---
+ interdrv/include/chip/cv181x/uapi/linux/vo_mipi_tx.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 interdrv/include/chip/cv181x/uapi/linux/vo_mipi_tx.h
+
+diff --git a/interdrv/include/chip/cv181x/uapi/linux/vo_mipi_tx.h b/interdrv/include/chip/cv181x/uapi/linux/vo_mipi_tx.h
+new file mode 100644
+index 0000000..1a1e5b5
+--- /dev/null
++++ b/interdrv/include/chip/cv181x/uapi/linux/vo_mipi_tx.h
+@@ -0,0 +1,9 @@
++#ifndef _UAPI_VO_MIPI_TX_H_
++#define _UAPI_VO_MIPI_TX_H_
++
++/* UAPI header for MIPI TX interface */
++#include "cvi_comm_mipi_tx.h"
++
++int mipi_tx_get_combo_dev_cfg(struct combo_dev_cfg_s *dev_cfg);
++
++#endif /* _UAPI_VO_MIPI_TX_H_ */
+-- 
+2.34.1
+

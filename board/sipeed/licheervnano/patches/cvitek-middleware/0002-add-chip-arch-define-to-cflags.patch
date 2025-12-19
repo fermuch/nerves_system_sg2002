@@ -1,0 +1,35 @@
+From: Assistant <assistant@example.com>
+Date: Fri, 19 Dec 2025 12:30:00 +0000
+Subject: [PATCH] Add chip architecture define to CFLAGS
+
+The UAPI headers from cvitek-modules require the chip architecture to be
+defined as a preprocessor macro (e.g., __CV181X__) to properly include
+the correct chip-specific definitions. Without this, compilation fails
+with "Unknown Chip Architecture!" error.
+
+This patch adds -D__$(CHIP_ARCH)__ to CFLAGS based on the CHIP_ARCH
+variable that's already being passed to the build system.
+
+Signed-off-by: Assistant <assistant@example.com>
+---
+ v2/Makefile.param | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/v2/Makefile.param b/v2/Makefile.param
+index 0e4df16..aaaaaaa 100644
+--- a/v2/Makefile.param
++++ b/v2/Makefile.param
+@@ -99,6 +99,10 @@ WARNING_LEVEL=-Wall -Wextra
+ #Generate object files by CC
+ CFLAGS   = $(OPT_LEVEL) -std=gnu11 -g $(WARNING_LEVEL) -fPIC -ffunction-sections -fdata-sections -Wl,--gc-sections $(CVI_TARGET_PACKAGES_INCLUDE)
++# Add chip architecture define for UAPI headers
++ifneq ($(CHIP_ARCH),)
++CFLAGS += -D__$(CHIP_ARCH)__
++endif
+ #Generate object files by CXX
+ CXXFLAGS = $(OPT_LEVEL) -std=gnu++11 -g $(WARNING_LEVEL) -fPIC -ffunction-sections -fdata-sections -Wl,--gc-sections $(CVI_TARGET_PACKAGES_INCLUDE)
+ #Generate dependencies files by CC and CXX
+ DEPFLAGS = -MMD
+-- 
+2.34.1
+
