@@ -18,6 +18,7 @@ defmodule UiWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/camera", CameraLive
   end
 
   scope "/internal", UiWeb do
