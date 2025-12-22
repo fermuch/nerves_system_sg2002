@@ -34,17 +34,31 @@ defmodule Example.Application do
   else
     defp target_children() do
       [
-        # Supervisor.child_spec(
-        #   {
-        #     MuonTrap.Daemon,
-        #     [
-        #       "sscma-elixir",
-        #       ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300"],
-        #       [logger_fun: {Example.AiDispatcher, :dispatch, []}]
-        #     ],
-        #   },
-        #   id: :sscma_elixir_daemon
-        # ),
+        Supervisor.child_spec(
+          {
+            MuonTrap.Daemon,
+            [
+              # "sscma-elixir",
+              # ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300", "--base64", "0"],
+              "/data/run",
+              [
+                "--model", "/data/model.cvimodel",
+                # run the model for every frame
+                "--tpu-delay", "0",
+                # detections over 10% confidence are published
+                "--threshold", "0.1",
+                # enable receiving base64 encoded images
+                "--base64", "1",
+                # publish the detections to the internal camera endpoint
+                "--publish-http-to", "http://localhost/internal/camera"
+              ],
+              [
+                # logger_fun: {Example.AiDispatcher, :dispatch, []},
+              ]
+            ],
+          },
+          id: :sscma_elixir_daemon
+        ),
       ]
     end
   end

@@ -20,6 +20,12 @@ defmodule UiWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/internal", UiWeb do
+    pipe_through :api
+
+    post "/camera", InternalController, :camera
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", UiWeb do
   #   pipe_through :api
