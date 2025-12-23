@@ -44,13 +44,18 @@ defmodule Example.Application do
               [
                 "--model", "/data/model.cvimodel",
                 # run the model for every frame
-                "--tpu-delay", "0",
+                "--tpu-fps", "3",
+                "--camera-width", "1280",
+                "--camera-height", "720",
+                "--camera-fps", "15",
                 # detections over 10% confidence are published
                 "--threshold", "0.1",
                 # enable receiving base64 encoded images
                 "--base64", "1",
                 # publish the detections to the internal camera endpoint
-                "--publish-http-to", "http://localhost/internal/camera"
+                "--publish-http-to", "http://localhost/internal/camera",
+                # we only need http, so we can silence the console output
+                "--quiet"
               ],
               [
                 # logger_fun: {Example.AiDispatcher, :dispatch, []},

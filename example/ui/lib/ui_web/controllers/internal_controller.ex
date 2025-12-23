@@ -1,6 +1,8 @@
 defmodule UiWeb.InternalController do
   use UiWeb, :controller
 
+  require Logger
+
   alias Phoenix.PubSub
 
   @pubsub_topic "camera"
