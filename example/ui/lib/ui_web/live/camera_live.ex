@@ -14,13 +14,15 @@ defmodule UiWeb.CameraLive do
        elapsed_since_last_frame: nil,
        frame_num: nil,
        results: nil,
-       last_results: nil
+       last_results: nil,
+       temperature: nil
      )}
   end
 
   # Timer message to query GenServer and update client (excluding frame)
   def handle_info(:fetch_update, socket) do
     state = Ui.CameraState.get()
+    temperature = read_temperature()
     schedule_update()
 
     {:noreply,
@@ -29,7 +31,8 @@ defmodule UiWeb.CameraLive do
        elapsed_since_last_frame: state.elapsed_since_last_frame,
        frame_num: state.frame_num,
        results: state.results,
-       last_results: state.last_results
+       last_results: state.last_results,
+       temperature: temperature
      )}
   end
 
@@ -40,6 +43,20 @@ defmodule UiWeb.CameraLive do
 
   defp schedule_update do
     Process.send_after(self(), :fetch_update, @update_interval)
+  end
+
+  defp read_temperature do
+    case File.read("/sys/class/thermal/thermal_zone0/temp") do
+      {:ok, content} ->
+        content
+        |> String.trim()
+        |> String.to_integer()
+        |> Kernel./(1000)
+        |> Float.round(1)
+
+      {:error, _} ->
+        nil
+    end
   end
 
   def render(assigns) do
@@ -64,6 +81,12 @@ defmodule UiWeb.CameraLive do
                 <div>
                   <span class="font-medium">Elapsed Since Last Frame:</span>
                   <span class="ml-2"><%= @elapsed_since_last_frame || "N/A" %> ms</span>
+                </div>
+                <div>
+                  <span class="font-medium">Temperature:</span>
+                  <span class="ml-2">
+                    <%= if @temperature, do: "#{:erlang.float_to_binary(@temperature, decimals: 1)}°C", else: "N/A" %>
+                  </span>
                 </div>
               </div>
             </div>
