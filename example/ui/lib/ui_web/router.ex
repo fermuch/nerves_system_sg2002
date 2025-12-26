@@ -17,8 +17,7 @@ defmodule UiWeb.Router do
   scope "/", UiWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-    live "/camera", CameraLive
+    live "/", CameraLive
   end
 
   scope "/internal", UiWeb do
@@ -27,10 +26,12 @@ defmodule UiWeb.Router do
     post "/camera", InternalController, :camera
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", UiWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", UiWeb do
+    pipe_through :api
+
+    get "/camera", CameraController, :show
+    get "/camera/mjpeg", CameraController, :mjpeg
+  end
 
   # Enable LiveDashboard in development
   if Application.compile_env(:ui, :dev_routes) do

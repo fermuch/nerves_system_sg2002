@@ -1,33 +1,36 @@
 defmodule UiWeb.CameraLive do
   use UiWeb, :live_view
 
-  @pubsub_topic "camera"
+  @update_interval 100
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      UiWeb.Endpoint.subscribe(@pubsub_topic)
+      schedule_update()
     end
 
     {:ok,
      assign(socket,
-       camera_data: nil,
        tpu_elapsed: nil,
        elapsed_since_last_frame: nil,
-       frame: nil,
        frame_num: nil,
        results: nil,
        last_results: nil
      )}
   end
 
-  def handle_info(%{topic: @pubsub_topic, payload: data}, socket) do
-    update_assigns(socket, data)
-  end
+  # Timer message to query GenServer and update client (excluding frame)
+  def handle_info(:fetch_update, socket) do
+    state = Ui.CameraState.get()
+    schedule_update()
 
-  # Handle direct payload (when broadcast sends the map directly)
-  # Only match maps that look like camera data (have "frame" key)
-  def handle_info(%{"frame" => _} = data, socket) do
-    update_assigns(socket, data)
+    {:noreply,
+     assign(socket,
+       tpu_elapsed: state.tpu_elapsed,
+       elapsed_since_last_frame: state.elapsed_since_last_frame,
+       frame_num: state.frame_num,
+       results: state.results,
+       last_results: state.last_results
+     )}
   end
 
   # Ignore other messages
@@ -35,20 +38,8 @@ defmodule UiWeb.CameraLive do
     {:noreply, socket}
   end
 
-  defp update_assigns(socket, data) do
-    current_results = Map.get(data, "results")
-    last_results = if current_results != nil and current_results != [], do: current_results, else: socket.assigns.last_results
-
-    {:noreply,
-     assign(socket,
-       camera_data: data,
-       tpu_elapsed: Map.get(data, "tpu_elapsed"),
-       elapsed_since_last_frame: Map.get(data, "elapsed_since_last_frame"),
-       frame: Map.get(data, "frame"),
-       frame_num: Map.get(data, "frame_num"),
-       results: current_results,
-       last_results: last_results
-     )}
+  defp schedule_update do
+    Process.send_after(self(), :fetch_update, @update_interval)
   end
 
   def render(assigns) do
@@ -81,15 +72,11 @@ defmodule UiWeb.CameraLive do
           <div class="space-y-4">
             <div class="bg-gray-100 p-4 rounded-lg">
               <h2 class="font-semibold mb-2">Frame</h2>
-              <%= if @frame do %>
-                <img
-                  src={"data:image/jpeg;base64,#{@frame}"}
-                  alt="Camera Frame"
-                  class="max-w-full h-auto rounded border"
-                />
-              <% else %>
-                <div class="text-gray-500 text-center py-8">No frame data available</div>
-              <% end %>
+              <img
+                src={~p"/api/camera/mjpeg"}
+                alt="Camera Frame"
+                class="max-w-full h-auto rounded border"
+              />
             </div>
 
             <div class="bg-gray-100 p-4 rounded-lg">

@@ -11,6 +11,8 @@ defmodule Ui.Application do
       UiWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:ui, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Ui.PubSub},
+      # Camera state GenServer - stores latest camera data from HTTP requests
+      Ui.CameraState,
       # Start a worker by calling: Ui.Worker.start_link(arg)
       # {Ui.Worker, arg},
       # Start to serve requests, typically the last entry

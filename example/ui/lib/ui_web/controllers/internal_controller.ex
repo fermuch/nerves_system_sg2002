@@ -3,12 +3,9 @@ defmodule UiWeb.InternalController do
 
   require Logger
 
-  alias Phoenix.PubSub
-
-  @pubsub_topic "camera"
-
   def camera(conn, params) do
-    PubSub.broadcast(Ui.PubSub, @pubsub_topic, params)
+    # Update GenServer state as fast as possible
+    Ui.CameraState.update(params)
 
     conn
     |> put_status(:ok)
