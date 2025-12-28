@@ -24,3 +24,4 @@ erl_crash.dump
 tmp
 .nix-*
 example.img
+.elixir_ls

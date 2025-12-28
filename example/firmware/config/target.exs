@@ -119,8 +119,8 @@ end
 config :logger, :default_handler, false
 
 config :logger, RingLogger,
-  # keep the last 50 messages in memory
-  max_size: 50
+  # keep the last 150 messages in memory
+  max_size: 150
 
 config :nerves, :firmware,
   provisioning: :nerves_hub_link

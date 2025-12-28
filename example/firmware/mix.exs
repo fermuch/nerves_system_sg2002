@@ -32,12 +32,12 @@ defmodule Example.MixProject do
       # Dependencies for all targets
       {:nerves, "~> 1.10", runtime: false},
       {:shoehorn, "~> 0.9.1"},
-      {:ring_logger, "~> 0.11.0"},
+      {:ring_logger, "~> 0.11.5"},
       {:toolshed, "~> 0.4.0"},
 
       # Allow Nerves.Runtime on host to support development, testing and CI.
       # See config/host.exs for usage.
-      {:nerves_runtime, "~> 0.13.0"},
+      {:nerves_runtime, "~> 0.13.10"},
       {:nerves_time, "~> 0.2"},
 
       # Dependencies for all targets except :host
@@ -52,7 +52,7 @@ defmodule Example.MixProject do
 
 
       # for the example
-      {:muontrap, "~> 1.6"},
+      {:muontrap, "~> 1.7"},
 
       # ui for the example (poncho dependency)
       {:ui, path: "../ui", env: Mix.env()}
