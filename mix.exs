@@ -65,7 +65,7 @@ defmodule NervesSystemSG2002.MixProject do
 
   defp deps do
     [
-      {:nerves, "~> 1.12.0", runtime: false},
+      {:nerves, "1.11.3", runtime: false},
       {:nerves_system_br, "~> 1.33.0", runtime: false},
       {:nerves_toolchain_riscv64_nerves_linux_musl, "~> 14.2.0", runtime: false},
       {:nerves_system_linter, "~> 0.4.1", only: [:dev, :test], runtime: false},
