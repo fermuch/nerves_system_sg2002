@@ -43,18 +43,19 @@ defmodule Example.Application do
               "/data/run",
               [
                 "--model", "/data/model.cvimodel",
-                # detections over 50% confidence are published
+                # Detections over 50% confidence are published
                 "--threshold", "0.5",
-                # enable receiving base64 encoded images
+                # Enable receiving base64 encoded images
                 "--base64", "1",
-                # publish the detections to the internal camera endpoint
+                # Publish the detections to the internal camera endpoint
                 "--publish-http-to", "http://localhost/internal/camera",
-                # we only need http, so we can silence the console output
+                # We only need http, so we can silence the console output
                 "--quiet",
-                # use a smaller resolution for faster streaming over HTTP
+                # Use a smaller resolution for faster streaming over HTTP
+                # Internally, the TPU uses a resolution of 640x640
                 "--camera-width", "320",
-                "--camera-height", "240",
-                # process frames as fast as possible
+                "--camera-height", "320",
+                # Process frames as fast as possible
                 "--fps", "40",
               ],
               [
