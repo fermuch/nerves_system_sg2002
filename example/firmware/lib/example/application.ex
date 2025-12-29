@@ -51,10 +51,11 @@ defmodule Example.Application do
                 "--publish-http-to", "http://localhost/internal/camera",
                 # We only need http, so we can silence the console output
                 "--quiet",
-                # Use a smaller resolution for faster streaming over HTTP
+                # Use a smaller resolution for faster streaming over HTTP, since
+                # the USB ethernet is slow
                 # Internally, the TPU uses a resolution of 640x640
-                "--camera-width", "320",
-                "--camera-height", "320",
+                "--camera-width", "426",
+                "--camera-height", "240",
                 # Process frames as fast as possible
                 "--fps", "40",
               ],
