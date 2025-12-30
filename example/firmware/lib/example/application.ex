@@ -38,9 +38,7 @@ defmodule Example.Application do
           {
             MuonTrap.Daemon,
             [
-              # "sscma-elixir",
-              # ["--model", "/opt/models/yolo11n_cv181x_int8.cvimodel", "--tpu-delay", "300", "--base64", "0"],
-              "/data/run",
+              "sscma-elixir",
               [
                 "--model", "/data/model.cvimodel",
                 # Detections over 50% confidence are published
