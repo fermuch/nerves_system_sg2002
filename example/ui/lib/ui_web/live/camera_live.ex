@@ -84,44 +84,142 @@ defmodule UiWeb.CameraLive do
 
   def render(assigns) do
     ~H"""
+    <style>
+      .camera-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .camera-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .camera-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      @media (min-width: 768px) {
+        .camera-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .camera-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .camera-card {
+        background-color: #f3f4f6;
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .camera-card h2 {
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        font-size: 18px;
+      }
+      .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 14px;
+      }
+      .info-item {
+        display: flex;
+      }
+      .info-label {
+        font-weight: 500;
+      }
+      .info-value {
+        margin-left: 8px;
+      }
+      .led-button {
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: 500;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .led-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      }
+      .led-button:active {
+        transform: translateY(0);
+      }
+      .led-button-on {
+        background-color: #16a34a;
+      }
+      .led-button-on:hover {
+        background-color: #15803d;
+      }
+      .led-button-off {
+        background-color: #6b7280;
+      }
+      .led-button-off:hover {
+        background-color: #4b5563;
+      }
+      .camera-frame {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+      }
+      .json-display {
+        font-size: 12px;
+        overflow: auto;
+        max-height: 384px;
+        background-color: white;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+        font-family: 'Courier New', monospace;
+      }
+    </style>
     <Layouts.app flash={@flash}>
-      <div class="space-y-6">
-        <h1 class="text-2xl font-bold">Camera Data</h1>
+      <div class="camera-container">
+        <h1 class="camera-title">Camera Data</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <h2 class="font-semibold mb-2">Frame Information</h2>
-              <div class="space-y-2 text-sm">
-                <div>
-                  <span class="font-medium">Frame Number:</span>
-                  <span class="ml-2"><%= @frame_num || "N/A" %></span>
+        <div class="camera-grid">
+          <div class="camera-section">
+            <div class="camera-card">
+              <h2>Frame Information</h2>
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="info-label">Frame Number:</span>
+                  <span class="info-value"><%= @frame_num || "N/A" %></span>
                 </div>
-                <div>
-                  <span class="font-medium">TPU Elapsed:</span>
-                  <span class="ml-2"><%= @tpu_elapsed || "N/A" %> ms</span>
+                <div class="info-item">
+                  <span class="info-label">TPU Elapsed:</span>
+                  <span class="info-value"><%= @tpu_elapsed || "N/A" %> ms</span>
                 </div>
-                <div>
-                  <span class="font-medium">Elapsed Since Last Frame:</span>
-                  <span class="ml-2"><%= @elapsed_since_last_frame || "N/A" %> ms</span>
+                <div class="info-item">
+                  <span class="info-label">Elapsed Since Last Frame:</span>
+                  <span class="info-value"><%= @elapsed_since_last_frame || "N/A" %> ms</span>
                 </div>
-                <div>
-                  <span class="font-medium">Temperature:</span>
-                  <span class="ml-2">
+                <div class="info-item">
+                  <span class="info-label">Temperature:</span>
+                  <span class="info-value">
                     <%= if @temperature, do: "#{:erlang.float_to_binary(@temperature, decimals: 1)}°C", else: "N/A" %>
                   </span>
                 </div>
               </div>
             </div>
 
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <h2 class="font-semibold mb-2">LED Control</h2>
+            <div class="camera-card">
+              <h2>LED Control</h2>
               <button
                 id="led-toggle-btn"
                 phx-click="toggle_led"
                 class={[
-                  "px-4 py-2 rounded font-medium text-white transition-colors",
-                  if(@led_on, do: "bg-green-600 hover:bg-green-700", else: "bg-gray-500 hover:bg-gray-600")
+                  "led-button",
+                  if(@led_on, do: "led-button-on", else: "led-button-off")
                 ]}
               >
                 <%= if @led_on, do: "LED ON", else: "LED OFF" %>
@@ -129,19 +227,19 @@ defmodule UiWeb.CameraLive do
             </div>
           </div>
 
-          <div class="space-y-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <h2 class="font-semibold mb-2">Frame</h2>
+          <div class="camera-section">
+            <div class="camera-card">
+              <h2>Frame</h2>
               <img
                 src={~p"/api/camera/mjpeg"}
                 alt="Camera Frame"
-                class="max-w-full h-auto rounded border"
+                class="camera-frame"
               />
             </div>
 
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <h2 class="font-semibold mb-2">Last Results (JSON)</h2>
-              <pre class="text-xs overflow-auto max-h-96 bg-white p-2 rounded border"><%= if @last_results, do: Jason.encode!(@last_results, pretty: true), else: "No data" %></pre>
+            <div class="camera-card">
+              <h2>Last Results (JSON)</h2>
+              <pre class="json-display"><%= if @last_results, do: Jason.encode!(@last_results, pretty: true), else: "No data" %></pre>
             </div>
           </div>
         </div>
