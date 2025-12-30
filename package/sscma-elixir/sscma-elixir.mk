@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SSCMA_ELIXIR_VERSION = 51721a4
+SSCMA_ELIXIR_VERSION = fd1daac
 SSCMA_ELIXIR_SITE = https://github.com/monoflow-ayvu/sscma-elixir
 SSCMA_ELIXIR_SITE_METHOD = git
 SSCMA_ELIXIR_LICENSE = Apache-2.0
@@ -17,6 +17,23 @@ define SSCMA_ELIXIR_EXTRACT_CMDS
 	git clone --recursive $(SSCMA_ELIXIR_SITE) $(@D) && \
 	cd $(@D) && git checkout $(SSCMA_ELIXIR_VERSION)
 endef
+
+# The sscma-elixir CMakeLists.txt expects host-tools at $(BUILD_DIR)/host-tools
+define SSCMA_ELIXIR_CREATE_TOOLCHAIN_SYMLINKS
+	if [ ! -e "$(BUILD_DIR)/host-tools" ]; then \
+		ln -sf "$(HOST_DIR)/opt/ext-toolchain" "$(BUILD_DIR)/host-tools"; \
+	fi && \
+	if [ -d "$(HOST_DIR)/opt/ext-toolchain/gcc/riscv64-linux-musl-x86_64/bin" ] && \
+	   [ ! -f "$(HOST_DIR)/opt/ext-toolchain/gcc/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-gcc" ]; then \
+		cd "$(HOST_DIR)/opt/ext-toolchain/gcc/riscv64-linux-musl-x86_64/bin" && \
+		for tool in gcc g++ objcopy objdump ar as ld nm ranlib strip; do \
+			if [ -f "riscv64-linux-musl-$$tool" ] && [ ! -f "riscv64-unknown-linux-musl-$$tool" ]; then \
+				ln -sf "riscv64-linux-musl-$$tool" "riscv64-unknown-linux-musl-$$tool"; \
+			fi; \
+		done; \
+	fi
+endef
+SSCMA_ELIXIR_PRE_CONFIGURE_HOOKS += SSCMA_ELIXIR_CREATE_TOOLCHAIN_SYMLINKS
 
 # Set up environment variables for CMake build
 SSCMA_ELIXIR_CONF_ENV = SG200X_SDK_PATH=$(RECAMERA_SDK_DIR)
@@ -31,5 +48,3 @@ define SSCMA_ELIXIR_INSTALL_TARGET_CMDS
 endef
 
 $(eval $(cmake-package))
-
-
