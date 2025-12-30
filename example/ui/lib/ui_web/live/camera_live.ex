@@ -2,6 +2,7 @@ defmodule UiWeb.CameraLive do
   use UiWeb, :live_view
 
   @update_interval 100
+  @led_path "/sys/class/leds/white/brightness"
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
@@ -15,7 +16,8 @@ defmodule UiWeb.CameraLive do
        frame_num: nil,
        results: nil,
        last_results: nil,
-       temperature: nil
+       temperature: nil,
+       led_on: read_led_state()
      )}
   end
 
@@ -41,6 +43,12 @@ defmodule UiWeb.CameraLive do
     {:noreply, socket}
   end
 
+  def handle_event("toggle_led", _params, socket) do
+    new_state = !socket.assigns.led_on
+    write_led_state(new_state)
+    {:noreply, assign(socket, led_on: new_state)}
+  end
+
   defp schedule_update do
     Process.send_after(self(), :fetch_update, @update_interval)
   end
@@ -57,6 +65,21 @@ defmodule UiWeb.CameraLive do
       {:error, _} ->
         nil
     end
+  end
+
+  defp read_led_state do
+    case File.read(@led_path) do
+      {:ok, content} ->
+        content |> String.trim() |> String.to_integer() > 0
+
+      {:error, _} ->
+        false
+    end
+  end
+
+  defp write_led_state(on?) do
+    value = if on?, do: "1", else: "0"
+    File.write(@led_path, value)
   end
 
   def render(assigns) do
@@ -89,6 +112,20 @@ defmodule UiWeb.CameraLive do
                   </span>
                 </div>
               </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <h2 class="font-semibold mb-2">LED Control</h2>
+              <button
+                id="led-toggle-btn"
+                phx-click="toggle_led"
+                class={[
+                  "px-4 py-2 rounded font-medium text-white transition-colors",
+                  if(@led_on, do: "bg-green-600 hover:bg-green-700", else: "bg-gray-500 hover:bg-gray-600")
+                ]}
+              >
+                <%= if @led_on, do: "LED ON", else: "LED OFF" %>
+              </button>
             </div>
           </div>
 
