@@ -50,3 +50,9 @@ Added `sscma-elixir` program.
 ## v0.18.1
 
 Correctly publishing `sscma-elixir` program in the image and added NixOS support.
+
+## v1.0.0
+
+First fully working version with all the bell and whistles working.
+
+Demo included in the `example` folder.
