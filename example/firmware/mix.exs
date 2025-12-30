@@ -53,6 +53,7 @@ defmodule Example.MixProject do
 
       # for the example
       {:muontrap, "~> 1.7"},
+      {:circuits_gpio, "~> 2.1"},
 
       # ui for the example (poncho dependency)
       {:ui, path: "../ui", env: Mix.env()}

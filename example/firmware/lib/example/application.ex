@@ -66,6 +66,8 @@ defmodule Example.Application do
           },
           id: :sscma_elixir_daemon
         ),
+        # LED controller for person detection indication
+        Example.LedController
       ]
     end
   end
