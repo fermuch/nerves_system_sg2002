@@ -252,7 +252,6 @@ defmodule UiWeb.CameraLive do
     <script phx-track-static src={~p"/assets/vendor/mjpeg.js"}></script>
     <script>
       (function() {
-        // Function to get detection results from data attribute
         function getDetections() {
           const detectionData = document.getElementById('detection-data');
           if (!detectionData) {
@@ -267,10 +266,10 @@ defmodule UiWeb.CameraLive do
           }
         }
 
-        // Wait for mjpeg.js to load and DOM to be ready
         let drawing = false;
         function initMJPEG() {
           if (typeof MJPEG === 'undefined') {
+            // Wait for mjpeg.js to load
             setTimeout(initMJPEG, 100);
             return;
           }
@@ -297,7 +296,7 @@ defmodule UiWeb.CameraLive do
             detections.forEach(function(detection) {
               // Format: {abs: {x1, y1, x2, y2}, target: 0 (person), score: ...}
               if (!detection.abs) {
-                return; // Skip if abs coordinates not available
+                return;
               }
 
               const abs = detection.abs;
@@ -306,7 +305,6 @@ defmodule UiWeb.CameraLive do
               const width = Math.round((abs.x2 || 0) - x);
               const height = Math.round((abs.y2 || 0) - y);
 
-              // Skip if invalid dimensions
               if (width <= 0 || height <= 0) {
                 return;
               }
@@ -316,7 +314,6 @@ defmodule UiWeb.CameraLive do
               ctx.lineWidth = 2;
               ctx.strokeRect(x, y, width, height);
 
-              // Draw label for person detections (target == 0)
               if (detection.target === 0 && detection.score !== undefined) {
                 const label = 'Person';
                 const score = (detection.score * 100).toFixed(1) + '%';
@@ -369,8 +366,6 @@ defmodule UiWeb.CameraLive do
           const streamUrl = new URL("/api/camera/mjpeg", document.location).href;
 
           // Create MJPEG player instance
-          // Note: mjpeg.js Player expects the container to be an <img> element
-          // and will set container.src directly with a blob URL
           const player = new MJPEG.Player(
             sourceImg,
             streamUrl,
