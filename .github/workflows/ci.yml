@@ -16,6 +16,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - uses: mathio/gha-cleanup@v1
+        with:
+          remove-browsers: true
+          verbose: true
       - uses: gridpoint-com/actions-nerves-system@v1
       - name: Get Buildroot Dependencies
         uses: ./.actions/get-br-dependencies
