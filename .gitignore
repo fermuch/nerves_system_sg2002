@@ -25,3 +25,4 @@ tmp
 .nix-*
 example.img
 .elixir_ls
+build

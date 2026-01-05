@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SSCMA_ELIXIR_VERSION = 7ccc09a
+SSCMA_ELIXIR_VERSION = fec7e5c
 SSCMA_ELIXIR_SITE = https://github.com/monoflow-ayvu/sscma-elixir
 SSCMA_ELIXIR_SITE_METHOD = git
 SSCMA_ELIXIR_LICENSE = Apache-2.0

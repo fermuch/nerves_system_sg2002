@@ -14,6 +14,16 @@ let
     # for ash/phoenix
     inotify-tools
     watchman
+
+    # Build essentials
+    cmake
+    gnumake
+    gcc
+    pkg-config
+    ninja
+    clang
+    clang-tools
+    ccls
   ];
   PROJECT_ROOT = builtins.toString ./.;
 
