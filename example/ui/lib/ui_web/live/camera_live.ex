@@ -170,6 +170,10 @@ defmodule UiWeb.CameraLive do
         height: auto;
         border-radius: 4px;
         border: 1px solid #d1d5db;
+        display: block;
+      }
+      #camera-canvas {
+        background-color: #000;
       }
       .json-display {
         font-size: 12px;
@@ -230,11 +234,11 @@ defmodule UiWeb.CameraLive do
           <div class="camera-section">
             <div class="camera-card">
               <h2>Frame</h2>
-              <img
-                src={~p"/api/camera/mjpeg"}
-                alt="Camera Frame"
-                class="camera-frame"
-              />
+              <div style="position: relative; display: inline-block;">
+                <canvas id="camera-canvas" class="camera-frame" width="426" height="240"></canvas>
+                <img id="camera-source" style="display: none;" width="426" height="240" />
+                <div id="detection-data" data-results={if @results, do: Jason.encode!(@results), else: "[]"} style="display: none;"></div>
+              </div>
             </div>
 
             <div class="camera-card">
@@ -245,6 +249,174 @@ defmodule UiWeb.CameraLive do
         </div>
       </div>
     </Layouts.app>
+    <script phx-track-static src={~p"/assets/vendor/mjpeg.js"}></script>
+    <script>
+      (function() {
+        // Function to get detection results from data attribute
+        function getDetections() {
+          const detectionData = document.getElementById('detection-data');
+          if (!detectionData) {
+            return [];
+          }
+          try {
+            const results = JSON.parse(detectionData.getAttribute('data-results') || '[]');
+            return Array.isArray(results) ? results : [];
+          } catch (e) {
+            console.error('Error parsing detection data:', e);
+            return [];
+          }
+        }
+
+        // Wait for mjpeg.js to load and DOM to be ready
+        let drawing = false;
+        function initMJPEG() {
+          if (typeof MJPEG === 'undefined') {
+            setTimeout(initMJPEG, 100);
+            return;
+          }
+
+          const sourceImg = document.getElementById('camera-source');
+          const canvas = document.getElementById('camera-canvas');
+          if (!sourceImg || !canvas) {
+            console.error('Camera elements not found');
+            return;
+          }
+
+          const ctx = canvas.getContext('2d');
+          let canvasWidth = 0;
+          let canvasHeight = 0;
+
+          // Function to draw detection boxes on canvas
+          function drawDetections() {
+            const detections = getDetections();
+            if (!detections || detections.length === 0) {
+              return;
+            }
+
+            // Draw each detection box
+            detections.forEach(function(detection) {
+              // Format: {abs: {x1, y1, x2, y2}, target: 0 (person), score: ...}
+              if (!detection.abs) {
+                return; // Skip if abs coordinates not available
+              }
+
+              const abs = detection.abs;
+              const x = Math.round(abs.x1 || 0);
+              const y = Math.round(abs.y1 || 0);
+              const width = Math.round((abs.x2 || 0) - x);
+              const height = Math.round((abs.y2 || 0) - y);
+
+              // Skip if invalid dimensions
+              if (width <= 0 || height <= 0) {
+                return;
+              }
+
+              // Draw bounding box
+              ctx.strokeStyle = '#00ff00';
+              ctx.lineWidth = 2;
+              ctx.strokeRect(x, y, width, height);
+
+              // Draw label for person detections (target == 0)
+              if (detection.target === 0 && detection.score !== undefined) {
+                const label = 'Person';
+                const score = (detection.score * 100).toFixed(1) + '%';
+                const labelText = `${label} ${score}`;
+
+                ctx.fillStyle = '#00ff00';
+                ctx.font = '16px Arial';
+                ctx.fillText(labelText, x, Math.max(y - 5, 15));
+              }
+            });
+          }
+
+          // Function to update canvas with image and detections
+          function updateCanvas() {
+            if (drawing) {
+              return;
+            }
+            drawing = true;
+            if (!sourceImg.complete) {
+              console.debug('[Canvas] Image not complete yet');
+              return;
+            }
+
+            if (sourceImg.naturalWidth === 0 || sourceImg.naturalHeight === 0) {
+              console.debug('[Canvas] Image has no dimensions yet', {
+                naturalWidth: sourceImg.naturalWidth,
+                naturalHeight: sourceImg.naturalHeight,
+                src: sourceImg.src ? 'set' : 'not set'
+              });
+              return;
+            }
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            // Draw image on canvas
+            try {
+              ctx.drawImage(sourceImg, 0, 0);
+              console.debug('[Canvas] Image drawn to canvas');
+            } catch (e) {
+              console.error('[Canvas] Error drawing image:', e);
+              return;
+            }
+
+            // Draw detection boxes on top
+            drawDetections();
+            drawing = false;
+          }
+
+          const streamUrl = new URL("/api/camera/mjpeg", document.location).href;
+
+          // Create MJPEG player instance
+          // Note: mjpeg.js Player expects the container to be an <img> element
+          // and will set container.src directly with a blob URL
+          const player = new MJPEG.Player(
+            sourceImg,
+            streamUrl,
+            null, // username
+            null, // password
+            {
+              onStart: function() {
+                console.info('[MJPEG] Stream started');
+              },
+              onStop: function() {
+                console.info('[MJPEG] Stream stopped');
+              },
+              onError: function(status, payload) {
+                console.error('[MJPEG] Error:', status, payload);
+              },
+              onFrame: function(frame) {},
+              onLoad: function(event) {
+                updateCanvas();
+              }
+            }
+          );
+
+          sourceImg.addEventListener('error', function(e) {
+            console.error('[Image] Error loading image:', e);
+          });
+
+          // Start the stream
+          player.start();
+
+          // Cleanup on page unload
+          window.addEventListener('beforeunload', function() {
+            player.stop();
+            if (sourceImg.dataset.prevUrl) {
+              URL.revokeObjectURL(sourceImg.dataset.prevUrl);
+            }
+          });
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initMJPEG);
+        } else {
+          initMJPEG();
+        }
+      })();
+    </script>
     """
   end
 end
