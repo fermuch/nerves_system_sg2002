@@ -56,7 +56,7 @@ defmodule Example.Application do
                 "--camera-height", "240",
                 # Process frames as fast as possible
                 "--fps", "40",
-                "--tpu-use-camera-size"
+                # "--tpu-use-camera-size"
               ],
               [
                 # logger_fun: {Example.AiDispatcher, :dispatch, []},
