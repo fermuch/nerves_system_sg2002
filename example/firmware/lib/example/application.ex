@@ -40,7 +40,7 @@ defmodule Example.Application do
             [
               "sscma-elixir",
               [
-                "--model", "/data/model.cvimodel",
+                "--model", "/opt/models/yolo11n_cv181x_int8.cvimodel",
                 # Detections over 50% confidence are published
                 "--threshold", "0.5",
                 # Enable receiving base64 encoded images
