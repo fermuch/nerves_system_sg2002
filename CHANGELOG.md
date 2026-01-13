@@ -56,3 +56,12 @@ Correctly publishing `sscma-elixir` program in the image and added NixOS support
 First fully working version with all the bell and whistles working.
 
 Demo included in the `example` folder.
+
+## v1.1.0
+
+Notable changes:
+
+* Better demo (showing squares where people are detected)
+* Using the same camera size as the TPU is using
+* Added support for USB dual role
+* Added driver for CP210X
