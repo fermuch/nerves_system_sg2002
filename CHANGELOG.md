@@ -1,16 +1,39 @@
-## v0.0.1
+## v1.1.0
 
-# First release
+Notable changes:
 
-First release! Still early, and might not work at all.
+* Better demo (showing squares where people are detected)
+* Using the same camera size as the TPU is using
+* Added support for USB dual role
+* Added driver for CP210X
 
-## v0.14.0
+## v1.0.0
 
-Updated version so it matches the current version
+First fully working version with all the bell and whistles working.
 
-## v0.15.0
+Demo included in the `example` folder.
 
-Added the `example` folder.
+## v0.18.1
+
+Correctly publishing `sscma-elixir` program in the image and added NixOS support.
+
+## v0.18.0
+
+Added `sscma-elixir` program.
+
+## v0.17.1
+
+Updated CI and using docker builder.
+
+## v0.17.0
+
+Finally, a working camera!
+
+Additionally, we have networking over USB.
+
+Still missing / untested:
+
+* Loading models to the TPU.
 
 ## v0.16.0
 
@@ -29,39 +52,16 @@ Non-working / Untested:
 * TPU driver
 * Camera
 
-## v0.17.0
+## v0.15.0
 
-Finally, a working camera!
+Added the `example` folder.
 
-Additionally, we have networking over USB.
+## v0.14.0
 
-Still missing / untested:
+Updated version so it matches the current version
 
-* Loading models to the TPU.
+## v0.0.1
 
-## v0.17.1
+# First release
 
-Updated CI and using docker builder.
-
-## v0.18.0
-
-Added `sscma-elixir` program.
-
-## v0.18.1
-
-Correctly publishing `sscma-elixir` program in the image and added NixOS support.
-
-## v1.0.0
-
-First fully working version with all the bell and whistles working.
-
-Demo included in the `example` folder.
-
-## v1.1.0
-
-Notable changes:
-
-* Better demo (showing squares where people are detected)
-* Using the same camera size as the TPU is using
-* Added support for USB dual role
-* Added driver for CP210X
+First release! Still early, and might not work at all.
