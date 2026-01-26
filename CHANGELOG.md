@@ -1,3 +1,7 @@
+## v1.2.0
+
+Updated `sscma-elixir` to the latest version.
+
 ## v1.1.0
 
 Notable changes:
