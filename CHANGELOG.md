@@ -1,3 +1,7 @@
+## v1.3.0
+
+Bumped ION memory from 20mb to 64mb.
+
 ## v1.2.0
 
 Updated `sscma-elixir` to the latest version.
