@@ -1,3 +1,7 @@
+## v1.3.1
+
+Updated mix dependencies.
+
 ## v1.3.0
 
 Bumped ION memory from 20mb to 64mb.
