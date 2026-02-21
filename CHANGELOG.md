@@ -1,3 +1,7 @@
+## v1.3.2
+
+Triggering a re-build.
+
 ## v1.3.1
 
 Updated mix dependencies.
