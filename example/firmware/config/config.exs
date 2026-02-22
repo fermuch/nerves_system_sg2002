@@ -21,7 +21,6 @@ config :nerves, source_date_epoch: "1752758865"
 # Use JSON for JSON parsing in Phoenix
 config :phoenix, :json_library, JSON
 
-
 if Mix.target() == :host do
   import_config "host.exs"
 else

@@ -122,8 +122,7 @@ config :logger, RingLogger,
   # keep the last 150 messages in memory
   max_size: 150
 
-config :nerves, :firmware,
-  provisioning: :nerves_hub_link
+config :nerves, :firmware, provisioning: :nerves_hub_link
 
 config :nerves_hub_link,
   # Replace this with your instance device endpoint if hosting your own

@@ -40,28 +40,35 @@ defmodule Example.Application do
             [
               "sscma-elixir",
               [
-                "--model", "/opt/models/yolo11n_cv181x_int8.cvimodel",
+                "--model",
+                "/opt/models/yolo11n_cv181x_int8.cvimodel",
                 # Detections over 50% confidence are published
-                "--threshold", "0.5",
+                "--threshold",
+                "0.5",
                 # Enable receiving base64 encoded images
-                "--base64", "1",
+                "--base64",
+                "1",
                 # Publish the detections to the internal camera endpoint
-                "--publish-http-to", "http://localhost/internal/camera",
+                "--publish-http-to",
+                "http://localhost/internal/camera",
                 # We only need http, so we can silence the console output
                 "--quiet",
                 # Use a smaller resolution for faster streaming over HTTP, since
                 # the USB ethernet is slow
                 # Internally, the TPU uses a resolution of 640x640
-                "--camera-width", "426",
-                "--camera-height", "240",
+                "--camera-width",
+                "426",
+                "--camera-height",
+                "240",
                 # Process frames as fast as possible
-                "--fps", "40",
+                "--fps",
+                "40"
                 # "--tpu-use-camera-size"
               ],
               [
                 # logger_fun: {Example.AiDispatcher, :dispatch, []},
               ]
-            ],
+            ]
           },
           id: :sscma_elixir_daemon
         ),
