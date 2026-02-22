@@ -23,7 +23,7 @@
 			};
 		};
 
-    
+
         dtb@1 {
             description = "Device tree";
             data = /incbin/("./sg2002_recamera_sd.dtb");
