@@ -57,7 +57,7 @@ defmodule NervesSystemSG2002.MixProject do
         {"TARGET_ARCH", "riscv64"},
         {"TARGET_CPU", "baseline_rv64"},
         {"TARGET_OS", "linux"},
-        {"TARGET_ABI", "musl"},
+        {"TARGET_ABI", "musl"}
       ],
       checksum: package_files()
     ]
@@ -124,7 +124,8 @@ defmodule NervesSystemSG2002.MixProject do
   defp build_runner_opts() do
     # Download source files first to get download errors right away.
     [
-      make_args: primary_site() ++ ["source", "cvitekconfig", "cvitekfsbl", "sg2002-nerves-fixes", "all"]
+      make_args:
+        primary_site() ++ ["source", "cvitekconfig", "cvitekfsbl", "sg2002-nerves-fixes", "all"]
     ]
   end
 
