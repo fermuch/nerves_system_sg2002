@@ -1,3 +1,7 @@
+## v1.3.3
+
+Re-organizing project files to make more sense and not reference LicheerV.
+
 ## v1.3.2
 
 Triggering a re-build.
