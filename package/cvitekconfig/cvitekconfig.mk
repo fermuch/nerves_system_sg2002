@@ -117,16 +117,16 @@ CVITEKFSBL_POST_PATCH_HOOKS += CVITEKFSBL_APPLY_CVITEK_CONFIG_HOOK
 CVITEKFSBL_DEPENDENCIES += cvitekconfig
 
 define UBOOT_APPLY_CVITEK_CONFIG_HOOK
-	@echo "Applying CVITEK Generated Config" 
+	@echo "Applying CVITEK Generated Config"
 	$(INSTALL) -D -m 0644 $(TARGET_DIR)/include/cvi_board_memmap.h $(@D)/include/cvi_board_memmap.h
-	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/generated/cvipart.h $(@D)/include/cvipart.h
-	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/generated/uboot/cvi_board_init.c $(@D)/board/cvitek/
+	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/board/sipeed/recamera/cvipart.h $(@D)/include/cvipart.h
+	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/board/sipeed/recamera/uboot/cvi_board_init.c $(@D)/board/cvitek/
 endef
 
 define LINUX_APPLY_CVITEK_CONFIG_HOOK
-	@echo "Applying SG2002 Generated Config" 
+	@echo "Applying SG2002 Generated Config"
 	$(INSTALL) -D -m 0644 $(TARGET_DIR)/include/cvi_board_memmap.h $(@D)/include/cvi_board_memmap.h
-	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/generated/cvipart.h $(@D)/include/cvipart.h
+	$(INSTALL) -D -m 0644 $(NERVES_DEFCONFIG_DIR)/board/sipeed/recamera/cvipart.h $(@D)/include/cvipart.h
 endef
 
 define LINUX_ADDITIONAL_INSTALL_STAGING_HOOK

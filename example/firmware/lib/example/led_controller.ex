@@ -93,6 +93,7 @@ defmodule Example.LedController do
       Circuits.GPIO.write(state.gpio, 0)
       Circuits.GPIO.close(state.gpio)
     end
+
     :ok
   end
 
@@ -115,6 +116,7 @@ defmodule Example.LedController do
   end
 
   defp turn_led_on(%{led_on: true} = state), do: state
+
   defp turn_led_on(state) do
     Circuits.GPIO.write(state.gpio, 1)
     Logger.debug("LED ON - person detected")
@@ -122,6 +124,7 @@ defmodule Example.LedController do
   end
 
   defp turn_led_off(%{led_on: false} = state), do: state
+
   defp turn_led_off(state) do
     Circuits.GPIO.write(state.gpio, 0)
     Logger.debug("LED OFF - no person for #{@led_off_delay}ms")
@@ -129,6 +132,7 @@ defmodule Example.LedController do
   end
 
   defp cancel_off_timer(%{off_timer: nil} = state), do: state
+
   defp cancel_off_timer(%{off_timer: timer} = state) do
     Process.cancel_timer(timer)
     %{state | off_timer: nil}
@@ -136,6 +140,7 @@ defmodule Example.LedController do
 
   defp maybe_start_off_timer(%{led_on: false} = state), do: state
   defp maybe_start_off_timer(%{off_timer: timer} = state) when timer != nil, do: state
+
   defp maybe_start_off_timer(state) do
     # LED is on and no timer running, start the off timer
     timer = Process.send_after(self(), :turn_off_led, @led_off_delay)
