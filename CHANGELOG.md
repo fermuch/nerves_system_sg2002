@@ -1,3 +1,7 @@
+## v1.3.5
+
+Added common USB serial device drivers.
+
 ## v1.3.4
 
 Added librstp.
