@@ -1,3 +1,7 @@
+## v1.3.6
+
+Fix when switching between A/B partitions.
+
 ## v1.3.5
 
 Added common USB serial device drivers.
