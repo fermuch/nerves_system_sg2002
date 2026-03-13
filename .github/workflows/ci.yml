@@ -15,7 +15,7 @@ jobs:
   get-br-dependencies:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: mathio/gha-cleanup@v1
         with:
           remove-browsers: true
@@ -48,7 +48,7 @@ jobs:
           swap-storage: true
       # needed for the docker nerves build runner
       - run: mkdir -p /home/runner/.ssh
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: gridpoint-com/actions-nerves-system@v1
       - name: Build nerves_system
         uses: ./.actions/build-system
@@ -63,7 +63,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: gridpoint-com/actions-nerves-system@v1
       - name: Deploy nerves_system
         uses: ./.actions/deploy-system
