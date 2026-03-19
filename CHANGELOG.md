@@ -1,3 +1,7 @@
+## v1.3.7
+
+Added python3, miniterm and esptool
+
 ## v1.3.6
 
 Fix when switching between A/B partitions.
