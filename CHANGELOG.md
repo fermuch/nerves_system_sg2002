@@ -1,3 +1,7 @@
+## v1.3.7
+
+Added the libs necessary for using Image lib in the system.
+
 ## v1.3.6
 
 Fix when switching between A/B partitions.
