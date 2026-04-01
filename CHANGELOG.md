@@ -1,3 +1,7 @@
+## v1.4.0
+
+Bumped version because of the change.
+
 ## v1.3.7
 
 Added the libs necessary for using Image lib in the system.
