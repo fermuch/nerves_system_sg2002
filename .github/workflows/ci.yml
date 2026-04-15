@@ -32,6 +32,7 @@ jobs:
           download-site-bucket-uri: ${{ vars.S3_BUCKET }}
           aws-role: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
+
   build-system:
     needs: [get-br-dependencies]
     runs-on: ubuntu-22.04
@@ -56,6 +57,70 @@ jobs:
           otp-version: ${{ env.OTP_VERSION }}
           elixir-version: ${{ env.ELIXIR_VERSION }}
           nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
+
+  build-system-emmc:
+    needs: [get-br-dependencies]
+    runs-on: ubuntu-22.04
+    env:
+      NERVES_STORAGE: emmc
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+      # needed for the docker nerves build runner
+      - run: mkdir -p /home/runner/.ssh
+      - uses: actions/checkout@v4
+      - uses: gridpoint-com/actions-nerves-system@v1
+      - uses: ./.actions/.internal/setup-beam-nerves
+        with:
+          otp-version: ${{ env.OTP_VERSION }}
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          nerves-bootstrap-version: ${{ env.NERVES_BOOTSTRAP_VERSION }}
+      - uses: ./.actions/.internal/restore-nerves-downloads
+      - uses: ./.actions/.internal/mix-deps-get
+      - name: Lint
+        shell: bash
+        run: mix nerves.system.lint nerves_defconfig_emmc
+      - uses: ./.actions/.internal/cache-buildroot-ccache
+      - name: Build
+        shell: bash
+        run: |
+          export BR2_CCACHE=y
+          export BR2_CCACHE_DIR=~/.buildroot-ccache
+          mix compile
+      - name: Did I really build
+        shell: bash
+        run: |
+          [ -d .nerves ] || (echo "VERSION file needs to be bumped or a config file needs to change to force a build"; exit 1)
+      - name: Create eMMC artifact
+        shell: bash
+        run: |
+          mkdir -p deploy/system-emmc/artifacts
+          cp ./CHANGELOG.md deploy/system-emmc/CHANGELOG.md
+          mix nerves.artifact nerves_system_sg2002 --path deploy/system-emmc/artifacts
+          # Rename to distinguish from the SD card variant
+          cd deploy/system-emmc/artifacts
+          for f in nerves_system_sg2002-portable-*.tar.gz; do
+            mv "$f" "${f/nerves_system_sg2002-/nerves_system_sg2002-emmc-}"
+          done
+      - name: Store eMMC artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: deploy/system-emmc/artifacts
+          name: system-emmc
+      - name: Save deploy cache
+        uses: actions/cache/save@v4
+        with:
+          path: deploy/system-emmc
+          key: deploy/system-emmc-${{ github.sha }}-${{ github.ref_name }}
+
   deploy-system:
     needs: [build-system]
     if: github.ref_type == 'tag'
@@ -69,3 +134,21 @@ jobs:
         uses: ./.actions/deploy-system
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-system-emmc:
+    # depends on deploy-system so the draft release already exists before we upload
+    needs: [build-system-emmc, deploy-system]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Restore deploy cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deploy/system-emmc
+          key: deploy/system-emmc-${{ github.sha }}-${{ github.ref_name }}
+      - name: Upload eMMC artifact to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} deploy/system-emmc/artifacts/*
