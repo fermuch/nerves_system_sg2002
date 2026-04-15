@@ -1,0 +1,3 @@
+#!/bin/sh
+# No-op: nerves_runtime handles data partition management
+exit 0

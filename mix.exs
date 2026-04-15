@@ -38,6 +38,9 @@ defmodule NervesSystemSG2002.MixProject do
   end
 
   defp nerves_package do
+    storage = System.get_env("NERVES_STORAGE", "sd")
+    defconfig = if storage == "emmc", do: "nerves_defconfig_emmc", else: "nerves_defconfig"
+
     [
       type: :system,
       artifact_sites: [
@@ -50,7 +53,7 @@ defmodule NervesSystemSG2002.MixProject do
       build_runner_opts: build_runner_opts(),
       platform: Nerves.System.BR,
       platform_config: [
-        defconfig: "nerves_defconfig"
+        defconfig: defconfig
       ],
       # # baseline_rv64 enables the a, c, d, and m extensions in zig
       env: [
@@ -106,16 +109,22 @@ defmodule NervesSystemSG2002.MixProject do
       "patches",
       "fwup_include",
       "rootfs-overlay",
+      "rootfs-overlay-emmc",
       "uboot-config",
       "external.mk",
       "Config.in",
       "CHANGELOG.md",
       "fwup-ops.conf",
+      "fwup-ops-emmc.conf",
       "fwup.conf",
+      "fwup-emmc.conf",
       "mix.exs",
       "nerves_defconfig",
+      "nerves_defconfig_emmc",
       "post-build.sh",
+      "post-build-emmc.sh",
       "post-createfs.sh",
+      "post-createfs-emmc.sh",
       "README.md",
       "VERSION"
     ]
