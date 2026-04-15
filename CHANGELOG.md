@@ -1,3 +1,7 @@
+## v1.5.0
+
+Creating eMMC image
+
 ## v1.4.0
 
 Bumped version because of the change.
