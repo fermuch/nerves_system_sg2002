@@ -1,3 +1,7 @@
+## v1.5.1
+
+Removing `:` from the device ID.
+
 ## v1.5.0
 
 Creating eMMC image
