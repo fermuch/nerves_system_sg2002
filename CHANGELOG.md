@@ -1,3 +1,7 @@
+## v1.6.0
+
+Publishing the `emmc` variant as its own target.
+
 ## v1.5.2
 
 Fix on CI when uploading eMMC image.
