@@ -52,7 +52,7 @@ if ! ifconfig wlan0 > /dev/null 2>&1; then
 else
   echo "wlan0 is up"
   # Set nerves' serial number to the MAC address of wlan0
-  ID=$(ifconfig wlan0 | grep 'HWaddr' | awk '{print $5}')
+  ID=$(ifconfig wlan0 | grep 'HWaddr' | awk '{print $5}' | tr -d ':')
   fw_setenv nerves_serial_number "$ID"
   echo "Setting nerves_serial_number to: $ID"
 fi
