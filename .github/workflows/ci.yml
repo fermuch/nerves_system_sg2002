@@ -104,12 +104,7 @@ jobs:
         run: |
           mkdir -p deploy/system-emmc/artifacts
           cp ./CHANGELOG.md deploy/system-emmc/CHANGELOG.md
-          mix nerves.artifact nerves_system_sg2002 --path deploy/system-emmc/artifacts
-          # Rename to distinguish from the SD card variant
-          cd deploy/system-emmc/artifacts
-          for f in nerves_system_sg2002-portable-*.tar.gz; do
-            mv "$f" "${f/nerves_system_sg2002-/nerves_system_sg2002-emmc-}"
-          done
+          mix nerves.artifact nerves_system_sg2002_emmc --path deploy/system-emmc/artifacts
       - name: Store eMMC artifacts
         uses: actions/upload-artifact@v4
         with:

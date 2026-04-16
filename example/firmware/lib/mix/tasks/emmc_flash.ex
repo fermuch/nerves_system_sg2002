@@ -49,8 +49,10 @@ defmodule Mix.Tasks.EmmcFlash do
         ])
 
     unless File.exists?(fw_path) do
-      Mix.raise("Firmware file not found: #{fw_path}\n" <>
-                  "Build it first with: NERVES_STORAGE=emmc MIX_TARGET=nerves_system_sg2002 mix firmware")
+      Mix.raise(
+        "Firmware file not found: #{fw_path}\n" <>
+          "Build it first with: NERVES_STORAGE=emmc MIX_TARGET=nerves_system_sg2002 mix firmware"
+      )
     end
 
     remote_fw = @remote_fw
@@ -63,6 +65,7 @@ defmodule Mix.Tasks.EmmcFlash do
     scp!(fw_path, remote_fw, user, target, port)
 
     Mix.shell().info("==> Flashing eMMC (#{@emmc_device}) — this may take a minute...")
+
     ssh!(
       "fwup -a -d #{@emmc_device} -t complete -i #{remote_fw} && rm -f #{remote_fw}",
       user,
@@ -71,14 +74,20 @@ defmodule Mix.Tasks.EmmcFlash do
     )
 
     Mix.shell().info("")
-    Mix.shell().info("eMMC flashed successfully. Power cycle the board (remove SD card) to boot from eMMC.")
+
+    Mix.shell().info(
+      "eMMC flashed successfully. Power cycle the board (remove SD card) to boot from eMMC."
+    )
   end
 
   defp scp!(local, remote, user, host, port) do
     args = [
-      "-P", to_string(port),
-      "-o", "StrictHostKeyChecking=no",
-      "-o", "UserKnownHostsFile=/dev/null",
+      "-P",
+      to_string(port),
+      "-o",
+      "StrictHostKeyChecking=no",
+      "-o",
+      "UserKnownHostsFile=/dev/null",
       local,
       "#{user}@#{host}:#{remote}"
     ]
@@ -88,9 +97,12 @@ defmodule Mix.Tasks.EmmcFlash do
 
   defp ssh!(cmd, user, host, port) do
     args = [
-      "-p", to_string(port),
-      "-o", "StrictHostKeyChecking=no",
-      "-o", "UserKnownHostsFile=/dev/null",
+      "-p",
+      to_string(port),
+      "-o",
+      "StrictHostKeyChecking=no",
+      "-o",
+      "UserKnownHostsFile=/dev/null",
       "-t",
       "#{user}@#{host}",
       cmd

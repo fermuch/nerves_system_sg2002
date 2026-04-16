@@ -2,15 +2,15 @@ defmodule NervesSystemSG2002.MixProject do
   use Mix.Project
 
   @github_organization "fermuch"
-  @app :nerves_system_sg2002
-  @source_url "https://github.com/#{@github_organization}/#{@app}"
+  @base_app :nerves_system_sg2002
+  @source_url "https://github.com/#{@github_organization}/#{@base_app}"
   @version Path.join(__DIR__, "VERSION")
            |> File.read!()
            |> String.trim()
 
   def project do
     [
-      app: @app,
+      app: app(),
       version: @version,
       elixir: "~> 1.18.4",
       compilers: Mix.compilers() ++ [:nerves_package],
@@ -37,6 +37,12 @@ defmodule NervesSystemSG2002.MixProject do
     [preferred_envs: %{docs: :docs, "hex.build": :docs, "hex.publish": :docs}]
   end
 
+  defp app do
+    if System.get_env("NERVES_STORAGE") == "emmc",
+      do: :nerves_system_sg2002_emmc,
+      else: @base_app
+  end
+
   defp nerves_package do
     storage = System.get_env("NERVES_STORAGE", "sd")
     defconfig = if storage == "emmc", do: "nerves_defconfig_emmc", else: "nerves_defconfig"
@@ -44,7 +50,7 @@ defmodule NervesSystemSG2002.MixProject do
     [
       type: :system,
       artifact_sites: [
-        {:github_releases, "#{@github_organization}/#{@app}"}
+        {:github_releases, "#{@github_organization}/#{@base_app}"}
       ],
       build_runner: Nerves.Artifact.BuildRunners.Docker,
       build_runner_config: [
