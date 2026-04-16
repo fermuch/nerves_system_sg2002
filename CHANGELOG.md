@@ -1,3 +1,7 @@
+## v1.6.1
+
+Minor fix.
+
 ## v1.6.0
 
 Publishing the `emmc` variant as its own target.
