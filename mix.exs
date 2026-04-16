@@ -37,15 +37,17 @@ defmodule NervesSystemSG2002.MixProject do
     [preferred_envs: %{docs: :docs, "hex.build": :docs, "hex.publish": :docs}]
   end
 
+  defp emmc? do
+    System.get_env("NERVES_STORAGE") == "emmc" or
+      String.ends_with?(__DIR__, "nerves_system_sg2002_emmc")
+  end
+
   defp app do
-    if System.get_env("NERVES_STORAGE") == "emmc",
-      do: :nerves_system_sg2002_emmc,
-      else: @base_app
+    if emmc?(), do: :nerves_system_sg2002_emmc, else: @base_app
   end
 
   defp nerves_package do
-    storage = System.get_env("NERVES_STORAGE", "sd")
-    defconfig = if storage == "emmc", do: "nerves_defconfig_emmc", else: "nerves_defconfig"
+    defconfig = if emmc?(), do: "nerves_defconfig_emmc", else: "nerves_defconfig"
 
     [
       type: :system,
