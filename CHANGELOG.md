@@ -1,3 +1,7 @@
+## v1.5.2
+
+Fix on CI when uploading eMMC image.
+
 ## v1.5.1
 
 Removing `:` from the device ID.
