@@ -1,4 +1,13 @@
-defmodule NervesSystemSG2002.MixProject do
+is_nerves_sg2002_emmc =
+  System.get_env("NERVES_STORAGE") == "emmc" or
+    String.ends_with?(__DIR__, "nerves_system_sg2002_emmc")
+
+nerves_sg2002_module =
+  if is_nerves_sg2002_emmc,
+    do: NervesSystemSG2002EMMC.MixProject,
+    else: NervesSystemSG2002.MixProject
+
+defmodule nerves_sg2002_module do
   use Mix.Project
 
   @github_organization "fermuch"
@@ -7,6 +16,7 @@ defmodule NervesSystemSG2002.MixProject do
   @version Path.join(__DIR__, "VERSION")
            |> File.read!()
            |> String.trim()
+  @is_emmc is_nerves_sg2002_emmc
 
   def project do
     [
@@ -38,8 +48,7 @@ defmodule NervesSystemSG2002.MixProject do
   end
 
   defp emmc? do
-    System.get_env("NERVES_STORAGE") == "emmc" or
-      String.ends_with?(__DIR__, "nerves_system_sg2002_emmc")
+    @is_emmc
   end
 
   defp app do
