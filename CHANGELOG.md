@@ -1,3 +1,7 @@
+## v1.6.2
+
+Fix for version 1.6.1 (emmc target always selected)
+
 ## v1.6.1
 
 Minor fix.
