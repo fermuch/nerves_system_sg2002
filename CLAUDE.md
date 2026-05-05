@@ -43,7 +43,8 @@ mix firmware
 - `boot/` - Bootloader build definitions (cvitekfsbl)
 - `package/` - Custom Buildroot packages (cvitek modules, cloudutils, sscma, etc.)
 - `patches/` - Buildroot patches applied during build
-- `rootfs-overlay/` - Files overlaid onto the root filesystem
+- `rootfs_overlay/` - Files overlaid onto the root filesystem (SD variant). Uses snake_case so `Nerves.Erlinit.system_config_file/1` finds `etc/erlinit.config` and merges `:nerves, :erlinit` mix config from consuming projects.
+- `rootfs_overlay_emmc/` - Additional overlay layered on top for the eMMC variant.
 - `fwup_include/` - fwup configuration fragments
 - `uboot/` - U-Boot configuration and environment
 - `generated/` - Generated configuration files

@@ -1,3 +1,9 @@
+## v1.6.3
+
+Rename rootfs overlay directories from kebab-case to snake_case so
+`Nerves.Erlinit.system_config_file/1` finds `erlinit.config` and merges
+`:nerves, :erlinit` config from consuming projects.
+
 ## v1.6.2
 
 Fix for version 1.6.1 (emmc target always selected)
