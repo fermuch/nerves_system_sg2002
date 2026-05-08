@@ -1,3 +1,11 @@
+## v1.6.4
+
+Fix eMMC erlinit.config always using SD device paths (mmcblk1 instead of
+mmcblk0). Moved erlinit.config out of `rootfs_overlay/` into variant-specific
+overlays (`rootfs_overlay_sd/`, `rootfs_overlay_emmc/`) so that
+`Nerves.Erlinit.system_config_file/1` no longer overwrites the correct
+Buildroot-applied config during `mix firmware`.
+
 ## v1.6.3
 
 Rename rootfs overlay directories from kebab-case to snake_case so
