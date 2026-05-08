@@ -126,6 +126,7 @@ defmodule nerves_sg2002_module do
       "patches",
       "fwup_include",
       "rootfs_overlay",
+      "rootfs_overlay_sd",
       "rootfs_overlay_emmc",
       "uboot-config",
       "external.mk",
