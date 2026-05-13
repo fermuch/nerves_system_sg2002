@@ -1,3 +1,7 @@
+## v1.7.0
+
+Added sound utilities to use the mic.
+
 ## v1.6.4
 
 Fix eMMC erlinit.config always using SD device paths (mmcblk1 instead of
