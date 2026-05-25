@@ -53,8 +53,8 @@ mix firmware
 ### Partition Layout (fwup.conf)
 A/B partition scheme for OTA updates:
 1. **Boot** (16 MiB, FAT16) - Boot files at offset 16384
-2. **Rootfs A** (256 MiB, squashfs) - Active root filesystem
-3. **Rootfs B** (256 MiB, squashfs) - Inactive slot for OTA updates
+2. **Rootfs A** (1.5 GiB, squashfs) - Active root filesystem
+3. **Rootfs B** (1.5 GiB, squashfs) - Inactive slot for OTA updates
 4. **Data** (512+ MiB, ext4) - Application data, grows to fill SD card
 
 Special raw writes:
