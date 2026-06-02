@@ -1,3 +1,14 @@
+## v2.0.0
+
+Expanded the A/B partition layout for the 8 GB minimum target media:
+
+* Rootfs A/B slots grown from 256 MiB to 1.5 GiB (room for ML models in
+  the firmware image).
+* Data partition minimum raised to 1 GiB (still expands to fill the card).
+
+Breaking: existing devices require a factory reflash — OTA from the old
+layout cannot re-partition.
+
 ## v1.7.0
 
 Added sound utilities to use the mic.
