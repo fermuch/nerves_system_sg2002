@@ -108,16 +108,16 @@
 		clocks = <&clk CV181X_CLK_RTC_25M>;
 		clock-names = "clk_rtc";
 	};
-#if (CVIMMAP_ION_SIZE > 0)	
-	cvitek-ion {
-		compatible = "cvitek,cvitek-ion";
-
-		heap_carveout@0 {
-			compatible = "cvitek,carveout";
-			memory-region = <&ion_reserved>;
-		};
-	};
-#endif
+	/*
+	 * The cvitek-ion driver node is intentionally removed.  The ion pool
+	 * is now a reusable shared-dma-pool (CMA) region (see
+	 * cv181x_default_memmap.dtsi); the stock ion_cma_heap initcall creates
+	 * the heap and patch 0007 makes it report type CARVEOUT.  Leaving the
+	 * cvitek,cvitek-ion node here would make cvitek_ion_probe try to build
+	 * a carveout heap from a region it no longer owns, producing a bogus
+	 * zero-size CARVEOUT heap that shadows the real one (first-match
+	 * selection).  Do not re-add it while the pool is CMA-backed.
+	 */
 	sysdma_remap {
 		compatible = "cvitek,sysdma_remap";
 		reg = <0x0 0x03000154 0x0 0x10>;

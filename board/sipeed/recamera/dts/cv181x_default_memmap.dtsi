@@ -10,6 +10,13 @@
 		reg-names = "rtos_region";
 		reg = <0x0 CVIMMAP_FREERTOS_ADDR 0x0 CVIMMAP_FREERTOS_SIZE>;
 		// ion-size = <CVIMMAP_FREERTOS_RESERVED_ION_SIZE>;	//reserved ion size for freertos
+		/*
+		 * Keep ion-size = <0>.  fast_image demands ION at a fixed
+		 * physical address for the RTOS handshake, which CMA cannot
+		 * guarantee.  Re-enabling it with a nonzero size while the ion
+		 * pool below is a reusable CMA region will break the camera/TPU
+		 * stack.  See patches/linux/0007-ion-*.patch.
+		 */
 		ion-size = <0>;
 	};
 
@@ -18,8 +25,21 @@
 		#address-cells = <0x2>;
 		ranges;
 
+		/*
+		 * ION pool as a reusable CMA region instead of a dead-reserved
+		 * carveout.  "shared-dma-pool" + "reusable" lets Linux use the
+		 * unused portion for movable pages (page cache, BEAM heap) until
+		 * cma_alloc() migrates them out on demand, so big TPU models fit
+		 * without permanently stealing RAM.  The stock ion_cma_heap
+		 * auto-registers a heap for this area; patch 0007 makes it report
+		 * type CARVEOUT so the type-matched consumers find it.  Keep this
+		 * size-only (no reg) for dynamic placement, and do NOT add
+		 * linux,cma-default or no-map.  If you rename this node, update
+		 * the strcmp(heap->name, "ion") check in patch 0007 too.
+		 */
 		ion_reserved: ion {
-			compatible = "ion-region";
+			compatible = "shared-dma-pool";
+			reusable;
 			size = <0x0 CVIMMAP_ION_SIZE>;
 		};
 	};
