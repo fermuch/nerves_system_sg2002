@@ -1,3 +1,15 @@
+## v2.1.0
+
+Enable swap and zram in the kernel (both SD and eMMC targets):
+
+* `CONFIG_SWAP=y`, `CONFIG_ZRAM=y`, `CONFIG_ZSMALLOC=y` (5.10 zram depends on
+  it, no auto-select), `CONFIG_CRYPTO_LZO=y`, `CONFIG_CRYPTO_LZ4=y`.
+* BusyBox: `swapon -p` priority flag (`CONFIG_FEATURE_SWAPON_PRI=y`);
+  `mkswap`/`swapon`/`swapoff` were already enabled.
+
+No init/rootfs changes — zram device setup (disksize, mkswap, swapon,
+vm.swappiness) is left to the consuming application.
+
 ## v2.0.0
 
 Expanded the A/B partition layout for the 8 GB minimum target media:
