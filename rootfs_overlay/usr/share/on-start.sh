@@ -1,19 +1,15 @@
 #!/bin/sh
 
-# Set up compressed swap (zram) to absorb memory spikes (best-effort, never fails boot)
-setup_zram() {
-  [ -e /sys/block/zram0/disksize ] || return 0
-  grep -q zram0 /proc/swaps 2>/dev/null && return 0
-  grep -qw lz4 /sys/block/zram0/comp_algorithm 2>/dev/null && echo lz4 > /sys/block/zram0/comp_algorithm 2>/dev/null
-  mem_kb=$(awk '/^MemTotal:/{print $2}' /proc/meminfo 2>/dev/null)
-  [ -n "$mem_kb" ] && echo $((mem_kb * 3 / 4 * 1024)) > /sys/block/zram0/disksize 2>/dev/null
-  mkswap /dev/zram0 >/dev/null 2>&1 && swapon -p 100 /dev/zram0 2>/dev/null
-  return 0
-}
-setup_zram
+# Set up compressed swap (zram) to absorb memory spikes
+if [ -e /sys/block/zram0/disksize ]; then
+  echo lz4 > /sys/block/zram0/comp_algorithm
+  mem_kb=$(awk '/^MemTotal:/{print $2}' /proc/meminfo)
+  echo $((mem_kb * 3 / 4 * 1024)) > /sys/block/zram0/disksize
+  mkswap /dev/zram0 && swapon -p 100 /dev/zram0
+fi
 
-# Bias the OOM killer away from the BEAM (erlinit forks the VM next; it inherits PID 1's adj)
-echo -500 > /proc/1/oom_score_adj 2>/dev/null || true
+# Bias the OOM killer away from the BEAM erlinit starts next (inherits PID 1's score)
+echo -500 > /proc/1/oom_score_adj
 
 # Set up Sensor (camera)
 GPIO_SENSOR_PWR=358
