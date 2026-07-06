@@ -1,3 +1,43 @@
+## v3.0.0
+
+Switch the application data partition from ext4 to F2FS (both SD and eMMC
+targets). F2FS is log-structured and flash-friendly — better suited to the
+write-heavy, frequent-power-loss NVR workload.
+
+* Kernel: `CONFIG_F2FS_FS=y` (+ `_STAT_FS`, `_FS_XATTR`, `_FS_POSIX_ACL`).
+* Buildroot: `BR2_PACKAGE_F2FS_TOOLS=y` (`mkfs.f2fs`, `fsck.f2fs`,
+  `resize.f2fs`) on both defconfigs.
+* `NERVES_FW_APPLICATION_PART0_FSTYPE` → `"f2fs"` (drives the on-device
+  `mkfs.f2fs` performed by nerves_runtime on first boot); erlinit mounts
+  p4 as f2fs with `fsync_mode=strict`.
+
+**BREAKING — data loss on upgrade:** there is no in-place ext4→F2FS
+conversion. On the first boot after this update the data partition fails
+to mount as F2FS and is reformatted, erasing all application data
+(sqlite, recorded segments) and on-partition provisioning. Back the data
+up off-device first if it must be preserved. New/factory units are
+unaffected.
+
+fwup still does not format the data partition (`raw_memset` blanks the
+first 128 KiB / superblock); factory-reset (`fwup-ops`) is unchanged.
+
+Note: degrade-to-read-only + fsck on mount failure (instead of the
+default reformat-on-failure) requires a custom `:nerves_runtime,
+:init_module` in the consuming application.
+
+Activate zram swap and bias the OOM killer, in `on-start.sh` (rootfs):
+
+* Compressed swap (zram, lz4, disksize = 75% of RAM, `swapon -p 100`) is
+  now set up at boot to absorb transient memory spikes on the ~177 MiB
+  device. Best-effort — a no-op if the kernel lacks zram, and it never
+  blocks boot.
+* Init/BEAM `oom_score_adj` set to -500 so the kernel prefers other
+  victims before killing the VM.
+
+This supersedes the v2.1.0 note that deferred zram device setup to the
+consuming application: the kernel/busybox support shipped in v2.1.0, the
+rootfs activation ships here.
+
 ## v2.1.0
 
 Enable swap and zram in the kernel (both SD and eMMC targets):

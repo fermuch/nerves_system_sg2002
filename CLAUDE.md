@@ -55,7 +55,7 @@ A/B partition scheme for OTA updates:
 1. **Boot** (16 MiB, FAT16) - Boot files at offset 16384
 2. **Rootfs A** (1.5 GiB, squashfs) - Active root filesystem
 3. **Rootfs B** (1.5 GiB, squashfs) - Inactive slot for OTA updates
-4. **Data** (1 GiB+, ext4) - Application data, grows to fill SD card
+4. **Data** (1 GiB+, f2fs) - Application data, grows to fill SD card
 
 Special raw writes:
 - FIP/U-Boot at block offset 66
