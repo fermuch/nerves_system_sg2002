@@ -1,3 +1,14 @@
+## v3.0.1
+
+Revert the rootfs-level zram activation from v3.0.0 in `on-start.sh`.
+
+* The `zram0` disksize/comp_algorithm/`mkswap`/`swapon` block is removed;
+  the kernel/busybox support (shipped v2.1.0) stays. Sizing, compression
+  algorithm, and swapon priority are workload-specific, so activation is
+  left to the consuming application. This restores the v2.1.0 boundary
+  that v3.0.0 stepped past.
+* `oom_score_adj = -500` for init/BEAM is unchanged.
+
 ## v3.0.0
 
 Switch the application data partition from ext4 to F2FS (both SD and eMMC

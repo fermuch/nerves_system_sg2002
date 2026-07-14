@@ -1,12 +1,6 @@
 #!/bin/sh
 
-# Set up compressed swap (zram) to absorb memory spikes
-if [ -e /sys/block/zram0/disksize ]; then
-  echo lz4 > /sys/block/zram0/comp_algorithm
-  mem_kb=$(awk '/^MemTotal:/{print $2}' /proc/meminfo)
-  echo $((mem_kb * 3 / 4 * 1024)) > /sys/block/zram0/disksize
-  mkswap /dev/zram0 && swapon -p 100 /dev/zram0
-fi
+# zram support is built in, but activation/sizing is left to the app
 
 # Bias the OOM killer away from the BEAM erlinit starts next (inherits PID 1's score)
 echo -500 > /proc/1/oom_score_adj
