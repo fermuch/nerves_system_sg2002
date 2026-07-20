@@ -38,7 +38,7 @@ defmodule Example.MixProject do
       # Allow Nerves.Runtime on host to support development, testing and CI.
       # See config/host.exs for usage.
       {:nerves_runtime, "~> 0.13.12"},
-      {:nerves_time, "~> 0.2"},
+      {:nerves_time, "~> 0.4"},
 
       # Dependencies for all targets except :host
       {:nerves_pack, "~> 0.7.1", targets: @all_targets},
